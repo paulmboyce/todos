@@ -163,30 +163,30 @@ test('toggleUI component check use of API, for example '
       + 'that it calls getAttribute, for "item"'
       + 'much of this is unneccessary because were are testing internal calls rather than funtion effects '
       + 'but it is an example of using injection of fake (aka MOCK) objects.', ()=> {
-  let isFakeFunctionGetAttributeCalled = false;
-  let isFakeFunctionDisplayCalled = false;
-  let paramPassed = '';
-  const fakeFunction_GetAttribute = (param)=>{
-    paramPassed = param;
-    isFakeFunctionGetAttributeCalled = true; 
+
+  const mockFn_GetAttribute = jest.fn((param)=>{
     return 0;
-  };
-  const fakeElement = {getAttribute: fakeFunction_GetAttribute};
-  const fakeFunction_ToggleCompleted = (position) => {
-    positionPassed = position;
-  }
-  const fakeFunction_Display = () => {
-    isFakeFunctionDisplayCalled = true;
-  };
+  });
+
+  const fakeElement = {getAttribute: mockFn_GetAttribute};
+  const mockFn_ToggleCompleted = jest.fn();
+        
+  const mockFn_Display = jest.fn();
   const fakeTodoList = {
-    toggleCompleted: fakeFunction_ToggleCompleted, 
-    display:         fakeFunction_Display
+    toggleCompleted: mockFn_ToggleCompleted, 
+    display:         mockFn_Display
   };
+
+
   TODO.toggleUIElement (fakeElement, fakeTodoList);
 
-  expect(isFakeFunctionGetAttributeCalled).toBe(true);
-  expect(paramPassed).toEqual('item');
+  expect(mockFn_GetAttribute).toBeCalled();
+  expect(mockFn_GetAttribute).toHaveBeenCalledWith('item');
 
-  expect(isFakeFunctionDisplayCalled).toBe(true);
+  expect(mockFn_ToggleCompleted).toBeCalled();
+  expect(mockFn_ToggleCompleted).toHaveBeenCalledWith(0);
+
+  expect(mockFn_Display).toBeCalled();
 });
+
 
