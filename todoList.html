@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Practical JavaScript</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/sketchy/bootstrap.min.css"/>
+    <style>
+      body {
+        background-color:powderblue;
+     /*   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;*/
+        font-size: x-large;
+      }
+      .matrix {
+        background-color:black;
+        color:limegreen;
+      }
+      .matrix-blue {
+        background-color:black;
+        color:turquoise;
+      }
+      .matrix-chalk-purple {
+        background-color:black;
+        color:thistle;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div style="padding: 10vw;">
+    <h1>My Todo List:</h1>
+    <button type="button" class="btn btn-info" onclick='window._app.todoList.toggleAll();' >TOGGLE</BUTTON>      
+    <input type="text" placeholder="e.g. buy some milk" id="inputTodo"/>
+    <button type="button" class="btn btn-warning" onclick='window._app.todoList.add(document.querySelector("#inputTodo").value);'>ADD</BUTTON>
+      <div id="id-todos" class="well" ><!--Placeholder-->
+      </div>
+    <textarea rows="20" cols="50" style="padding:30px;width:80vw;" 
+      class="matrix-chalk-purple" id='output' disabled readonly></textarea>
+    </div>
+
+    <script type="text/javascript" src='./todoList.js'></script>
+
+  </body>
+</html>
