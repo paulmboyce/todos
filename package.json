@@ -7,15 +7,22 @@
     "jest": "^25.1.0"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/paulmboyce/todos.git"
+    "type": "git",
+    "url": "https://github.com/paulmboyce/todos.git"
   },
   "devDependencies": {
-    "eslint": "^6.8.0"
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-standard": "^4.0.1"
   },
   "scripts": {
     "test": "jest",
-    "watch": "jest --watch *.js"
+    "watch": "jest --watch *.js",
+    "lint":"eslint"
   },
   "author": "",
   "license": "ISC"
