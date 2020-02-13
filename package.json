@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "Following https://watchandcode.com/ practical-javascript",
   "main": "todoList.js",
-  "dependencies": {
-    "jest": "^25.1.0"
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/paulmboyce/todos.git"
@@ -16,13 +14,14 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.18.3",
-    "eslint-plugin-standard": "^4.0.1"
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-jest": "^23.7.0",
+    "jest": "^25.1.0"
   },
   "scripts": {
     "test": "jest",
     "watch": "jest --watch *.js",
-    "lint":"eslint"
+    "lint": "eslint *.js --fix"
   },
   "author": "",
   "license": "ISC"

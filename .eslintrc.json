@@ -4,8 +4,8 @@
         "es6": true
     },
     "extends": [
-        "plugin:react/recommended",
-        "standard"
+        "standard",
+        "plugin:jest/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -19,7 +19,7 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "jest"
     ],
     "rules": {
     }
