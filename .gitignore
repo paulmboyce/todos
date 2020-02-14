@@ -4,6 +4,7 @@ npm-debug.log
 .env
 .DS_Store
 coverage
+*.code-workspace
 
 # Logs
 logs
