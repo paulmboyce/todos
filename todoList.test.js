@@ -200,4 +200,6 @@ test('Check click event for ADD TODO button', () => {
   // user action:
   document.getElementById('btn-add-todo').click();
   expect(mockFnAddTodoClickHandler).toHaveBeenCalled();
+
+  expect(1).toBe(2);
 });
