@@ -4,6 +4,13 @@
   "description": "Following https://watchandcode.com/ practical-javascript",
   "main": "todoList.js",
   "dependencies": {},
+  "jest" : {
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/node_modules/**",    
+      "!**/coverage/**"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/paulmboyce/todos.git"
@@ -22,6 +29,7 @@
   "scripts": {
     "test": "jest",
     "watch": "jest --watch *.js",
+    "coverage": "jest --coverage *.js",
     "lint": "eslint *.js --fix"
   },
   "author": "",
