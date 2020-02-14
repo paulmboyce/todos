@@ -31,7 +31,7 @@ const todoList = {
   },
   add(todo) {
     if (typeof todo !== 'string') {
-      return ('oops should be a string');
+      return 'oops should be a string';
     }
     const newTodo = {
       text: todo,
@@ -84,7 +84,7 @@ const todoList = {
   },
 
 };
-// eslint-disable-next-line block-scoped-var
+
 window.myTodoApp.todoList = todoList;
 
 function renderTodosWithEventHandling(injectedTodoList) {
