@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-commented-out-tests */
 const TODO = require('./todoList');
 
 const { todoList: TODO_LIST } = TODO;
@@ -111,7 +112,7 @@ test('toggle all as NOT COMPLETE', () => {
   }
 });
 
-test('toggle if ALL are complete toggleAll sets ALL to INCOPLETE', () => {
+test('toggle if ALL are complete toggleAll sets ALL to INCOMPLETE', () => {
   TODO_LIST.toggleAllCompleted(true);
   // Expect ALL to be true
   for (let i = 0; i < TODO_LIST.todos.length; i += 1) {
@@ -175,4 +176,28 @@ test('toggleUI component check use of API, for example '
   expect(mockFnToggleCompleted).toHaveBeenCalledWith(0);
 
   expect(mockFnDisplay).toBeCalled();
+});
+
+/* test('internals of renderTodosWithEventHandling', () => {
+  // Setup
+  window.document.body.innerHTML = '<div id="id-todos"></div>';
+  TODO.renderTodosWithEventHandling(TODO_LIST);
+
+  //  document.body.querySelector('div#id-todos').innerHTML = '';
+  expect(window.document.querySelector('div#id-todos').valueOf().id).toContain('id-todos');
+  expect(window.document.querySelector('div#id-todos').innerHTML).toContain('button');
+  expect(window.document.querySelector('div#id-todos').innerHTML).toContain('span');
+  expect(window.document.querySelector('div#id-todos').innerHTML).toContain('toggle');
+}); */
+
+test('Check click event for ADD TODO button', () => {
+  // setup:
+  window.document.body.innerHTML = '<button type="button" class="btn btn-warning" id="btn-add-todo">ADD</button>';
+  const mockFnAddTodoClickHandler = jest.fn(() => {
+  });
+
+  TODO.addClickEventHandler('button#btn-add-todo', mockFnAddTodoClickHandler(TODO_LIST));
+  // user action:
+  document.getElementById('btn-add-todo').click();
+  expect(mockFnAddTodoClickHandler).toHaveBeenCalled();
 });

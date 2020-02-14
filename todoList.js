@@ -19,7 +19,7 @@ if (typeof window === 'undefined') {
 window.myTodoApp = { todoList: [] };
 
 const todoList = {
-  todos: [{ text: 'todo 1', completed: false }, { text: 'todo 2', completed: false }],
+  todos: [], // format: { text: 'todo 1', completed: false }, { text: 'todo 2', completed: false }]
 
   display() {
     const message = buildMessage(this.todos);
@@ -114,7 +114,7 @@ function buildElements(todos) {
   const numTodos = todos.length;
   let html = '';
   for (let i = 0; i < numTodos; i += 1) {
-    let element = `<button type="button" item="${i}" class="btn btn-small btn-info toggle">${checkCompleted(todos[i])}</BUTTON>`;
+    let element = `<button type="button" item="${i}" class="btn btn-small btn-info toggle">${checkCompleted(todos[i])}</button>`;
     element += `<span>${todos[i].text}</span>`;
     element += `<span item="${i}" class="delete" onclick='deleteUITodo(this);'> X</span>`;
     element += '<br/>';
@@ -153,11 +153,32 @@ function printTo(id, newText) {
 }
 
 function addClickEventHandlersToToggleButtons(injectedTodoList) {
-  document.querySelectorAll('button.toggle')
-    .forEach((element) => {
-      element.addEventListener('click', function handleClickEvent() { toggleUIElement(this, injectedTodoList); });
-    });
+  if (document) {
+    document.querySelectorAll('button.toggle')
+      .forEach((element) => {
+        element.addEventListener('click', function handleClickEvent() { toggleUIElement(this, injectedTodoList); });
+      });
+  }
 }
+
+// Three functions together to setup click handlug in a testable mnner.
+
+function addClickEventHandler(elementSelector, fnClickHandler) {
+  if (document) {
+    const btnAddTodo = document.querySelector(elementSelector);
+    if (btnAddTodo) {
+      btnAddTodo.addEventListener('click', fnClickHandler);
+    }
+  }
+}
+function fnAddTodoClickHandler(injectedTodoList) {
+  return () => {
+    injectedTodoList.add(document.querySelector('#inputTodo').value);
+  };
+}
+// Important: Function Passed including the arguments here.
+addClickEventHandler('button#btn-add-todo', fnAddTodoClickHandler(window.myTodoApp.todoList));
+
 
 if (typeof module !== 'undefined') {
   module.exports = {
@@ -166,5 +187,7 @@ if (typeof module !== 'undefined') {
     checkCompleted,
     constants: { DONE, NOT_DONE },
     toggleUIElement,
+    renderTodosWithEventHandling,
+    addClickEventHandler,
   };
 }
