@@ -163,22 +163,30 @@ function addClickEventHandlersToToggleButtons(injectedTodoList) {
 
 // Three functions together to setup click handlug in a testable mnner.
 
-function addClickEventHandler(elementSelector, fnClickHandler) {
+const addClickEventHandler = function addClickEventHandler(elementSelector, fnClickHandler) {
   if (document) {
     const btnAddTodo = document.querySelector(elementSelector);
     if (btnAddTodo) {
       btnAddTodo.addEventListener('click', fnClickHandler);
     }
   }
-}
-function fnAddTodoClickHandler(injectedTodoList) {
-  return () => {
-    injectedTodoList.add(document.querySelector('#inputTodo').value);
-  };
-}
+};
+const fnAddTodoClickHandler = function fnAddTodoClickHandler(injectedTodoList) {
+  if (document) {
+    const inputElement = document.querySelector('#inputTodo');
+    if (inputElement) {
+      injectedTodoList.add(inputElement.value);
+    }
+  }
+};
 // Important: Function Passed including the arguments here.
 addClickEventHandler('button#btn-add-todo', fnAddTodoClickHandler(window.myTodoApp.todoList));
 
+function fnToggleAllClickHandler(injectedTodoList) {
+  injectedTodoList.toggleAll();
+}
+// Important: Function Passed including the arguments here.
+addClickEventHandler('button#btn-toggle-all', fnToggleAllClickHandler(window.myTodoApp.todoList));
 
 if (typeof module !== 'undefined') {
   module.exports = {
@@ -189,5 +197,6 @@ if (typeof module !== 'undefined') {
     toggleUIElement,
     renderTodosWithEventHandling,
     addClickEventHandler,
+    fnAddTodoClickHandler,
   };
 }

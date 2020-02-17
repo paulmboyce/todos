@@ -191,13 +191,41 @@ test('toggleUI component check use of API, for example '
 }); */
 
 test('Check click event for ADD TODO button', () => {
-  // setup:
-  window.document.body.innerHTML = '<button type="button" class="btn btn-warning" id="btn-add-todo">ADD</button>';
-  const mockFnAddTodoClickHandler = jest.fn(() => {
-  });
+  // ARRANGE
+  window.document.body.innerHTML = '<button type="button" class="btn btn-warning" id="btn-add-todo">ADD</button>'
+   + '<input type="text" id="inputTodo"/>';
 
-  TODO.addClickEventHandler('button#btn-add-todo', mockFnAddTodoClickHandler(TODO_LIST));
-  // user action:
+  const mockFnClickHandler = jest.fn(() => {
+    TODO.fnAddTodoClickHandler(TODO_LIST);
+  });
+  TODO.addClickEventHandler('button#btn-add-todo', mockFnClickHandler);
+
+  // ACT
+  document.getElementById('inputTodo').value = 'XYZ';
   document.getElementById('btn-add-todo').click();
-  expect(mockFnAddTodoClickHandler).toHaveBeenCalled();
+
+  // ASSERT
+  expect(mockFnClickHandler).toHaveBeenCalled();
+  expect(TODO_LIST.todos[TODO_LIST.todos.length - 1].text).toBe('XYZ');
 });
+
+test('toggle ALL ', () => {
+  // ARRANGE
+  const mockFnClickHandler = jest.fn(() => {
+    TODO_LIST.toggleAll();
+  });
+  document.body.innerHTML = '<button type="button" id="btn-toggle-all"</button>';
+  TODO.addClickEventHandler('button#btn-toggle-all', mockFnClickHandler);
+
+  // ACT
+  document.getElementById('btn-toggle-all').click();
+
+  // ASSERT
+  expect(mockFnClickHandler).toHaveBeenCalled();
+});
+
+/*
+test(' do we need babel?? ', () => {
+  expect(1).toEqual(2);
+});
+*/
