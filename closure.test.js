@@ -58,7 +58,8 @@ test('returns [] for range(3) (0)', () => {
   expect(result).toEqual(expect.arrayContaining(expected));
 });
 
-test('returns [4,5,6] for range (4) (6)', () => { // ARRANGE
+test('returns [4,5,6] for range (4) (6)', () => { 
+  // ARRANGE
   const expected = [4, 5, 6];
   // ACT
   let result = Closure.range(4);
