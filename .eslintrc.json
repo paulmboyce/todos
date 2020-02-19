@@ -22,5 +22,6 @@
         "jest"
     ],
     "rules": {
+        "indent": ["error", 4]
     }
 }
