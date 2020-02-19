@@ -19,8 +19,8 @@ if (typeof window === 'undefined') {
 window.myTodoApp = { todoList: [] };
 
 const todoList = {
-    todos: [], // format: { text: 'todo 1', completed: false }, { text: 'todo 2', completed: false }]
-
+    // format: { text: 'todo 1', completed: false }, { text: 'todo 2', completed: false }]
+    todos: [],
     display() {
         const message = buildMessage(this.todos);
         printTo('output', `My Todos:${message}`);

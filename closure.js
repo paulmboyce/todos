@@ -22,7 +22,7 @@ function range(start, end) {
 const range1 = range(3);
 range1(3);
 
-if (typeof module !== 'undefined') {
+if (module !== undefined) {
     module.exports = {
         range,
     };
