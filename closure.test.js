@@ -17,7 +17,6 @@ test('returns [3,4,5,6,7,8] for range (3,8)', () => {
     expect(result).toEqual(expect.arrayContaining(expected));
 });
 
-
 test('returns [] for range(3,0)', () => {
     // ARRANGE
     const expected = [];
@@ -46,7 +45,6 @@ test('returns [3,4,5,6,7,8] for range(3) (8)', () => {
     // ASSERT
     expect(result).toEqual(expect.arrayContaining(expected));
 });
-
 
 test('returns [] for range(3) (0)', () => {
     // ARRANGE

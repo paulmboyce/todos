@@ -21,7 +21,7 @@ window.myTodoApp = { todoList: [] };
 const todoList = {
     // format: { text: 'todo 1', completed: false }, { text: 'todo 2', completed: false }]
     todos: [],
-    display() {
+    display () {
         const message = buildMessage(this.todos);
         printTo('output', `My Todos:${message}`);
         // Do on mass because we create the elements on mass.
@@ -29,40 +29,40 @@ const todoList = {
         // we would do this for that element only.
         renderTodosWithEventHandling(this);
     },
-    add(todo) {
+    add (todo) {
         if (typeof todo !== 'string') {
             return 'oops should be a string';
         }
         const newTodo = {
             text: todo,
-            completed: false,
+            completed: false
         };
 
         this.todos.push(newTodo);
         this.display();
         return newTodo;
     },
-    change(position, newText) {
+    change (position, newText) {
         this.todos[position].text = newText;
         this.display();
     },
-    delete(position) {
+    delete (position) {
         this.todos.splice(position, 1);
         this.display();
     },
-    toggleCompleted(position) {
+    toggleCompleted (position) {
         const todo = this.todos[position];
         todo.completed = !todo.completed;
         this.display();
     },
-    toggleAllCompleted(done) {
+    toggleAllCompleted (done) {
         const numTodos = this.todos.length;
         for (let i = 0; i < numTodos; i += 1) {
             this.todos[i].completed = done;
         }
     },
     // Set ALL as COMPLETE (true), unless ALL are complete (so set as false)
-    toggleAll() {
+    toggleAll () {
         let hasAnyIncomplete = false;
         const numTodos = this.todos.length;
 
@@ -81,13 +81,13 @@ const todoList = {
         }
         // Update UI.
         this.display();
-    },
+    }
 
 };
 
 window.myTodoApp.todoList = todoList;
 
-function renderTodosWithEventHandling(injectedTodoList) {
+function renderTodosWithEventHandling (injectedTodoList) {
     const elements = buildElements(injectedTodoList.todos);
     if (window && window.document) {
         window.document.querySelector('div#id-todos').innerHTML = elements;
@@ -95,7 +95,7 @@ function renderTodosWithEventHandling(injectedTodoList) {
     addClickEventHandlersToToggleButtons(injectedTodoList);
 }
 
-function buildMessage(todos) {
+function buildMessage (todos) {
     let message = '';
     const numTodos = todos.length;
 
@@ -110,7 +110,7 @@ function buildMessage(todos) {
     return message;
 }
 
-function buildElements(todos) {
+function buildElements (todos) {
     const numTodos = todos.length;
     let html = '';
     for (let i = 0; i < numTodos; i += 1) {
@@ -123,7 +123,7 @@ function buildElements(todos) {
     return html;
 }
 
-function checkCompleted(todo) {
+function checkCompleted (todo) {
     let done = NOT_DONE;
     if (todo.completed === true) {
         done = DONE;
@@ -131,7 +131,7 @@ function checkCompleted(todo) {
     return done;
 }
 
-function toggleUIElement(el, injectedTodoList) {
+function toggleUIElement (el, injectedTodoList) {
     const position = el.getAttribute('item');
     injectedTodoList.toggleCompleted(position);
     injectedTodoList.display();
@@ -139,12 +139,12 @@ function toggleUIElement(el, injectedTodoList) {
 
 // This is called from dynamically HTML code.
 // eslint-disable-next-line no-unused-vars
-function deleteUITodo(el) {
+function deleteUITodo (el) {
     const position = el.getAttribute('item');
     todoList.delete(position);
 }
 
-function printTo(id, newText) {
+function printTo (id, newText) {
     // Validate web context exists.Else default to console
     if (window.document) {
         const target = window.document.querySelector(`#${id}`);
@@ -152,18 +152,18 @@ function printTo(id, newText) {
     }
 }
 
-function addClickEventHandlersToToggleButtons(injectedTodoList) {
+function addClickEventHandlersToToggleButtons (injectedTodoList) {
     if (document) {
         document.querySelectorAll('button.toggle')
             .forEach((element) => {
-                element.addEventListener('click', function handleClickEvent() { toggleUIElement(this, injectedTodoList); });
+                element.addEventListener('click', function handleClickEvent () { toggleUIElement(this, injectedTodoList); });
             });
     }
 }
 
 // Three functions together to setup click handlug in a testable mnner.
 
-const addClickEventHandler = function addClickEventHandler(elementSelector, fnClickHandler) {
+const addClickEventHandler = function addClickEventHandler (elementSelector, fnClickHandler) {
     if (document) {
         const btnAddTodo = document.querySelector(elementSelector);
         if (btnAddTodo) {
@@ -171,7 +171,7 @@ const addClickEventHandler = function addClickEventHandler(elementSelector, fnCl
         }
     }
 };
-const fnAddTodoClickHandler = function fnAddTodoClickHandler(injectedTodoList) {
+const fnAddTodoClickHandler = function fnAddTodoClickHandler (injectedTodoList) {
     if (document) {
         const inputElement = document.querySelector('#inputTodo');
         if (inputElement) {
@@ -182,7 +182,7 @@ const fnAddTodoClickHandler = function fnAddTodoClickHandler(injectedTodoList) {
 // Important: Function Passed including the arguments here.
 addClickEventHandler('button#btn-add-todo', fnAddTodoClickHandler(window.myTodoApp.todoList));
 
-function fnToggleAllClickHandler(injectedTodoList) {
+function fnToggleAllClickHandler (injectedTodoList) {
     injectedTodoList.toggleAll();
 }
 // Important: Function Passed including the arguments here.
@@ -197,6 +197,6 @@ if (typeof module !== 'undefined') {
         toggleUIElement,
         renderTodosWithEventHandling,
         addClickEventHandler,
-        fnAddTodoClickHandler,
+        fnAddTodoClickHandler
     };
 }

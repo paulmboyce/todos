@@ -4,7 +4,7 @@
         "es6": true
     },
     "extends": [
-        "airbnb-base",
+        "standard",
         "plugin:jest/recommended"
     ],
     "globals": {
@@ -22,6 +22,7 @@
         "jest"
     ],
     "rules": {
-        "indent": ["error", 4]
+        "indent": ["error", 4],
+        "semi": ["error", "always"]
     }
 }

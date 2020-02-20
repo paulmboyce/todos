@@ -1,8 +1,8 @@
-function range(start, end) {
+function range (start, end) {
     const result = [];
 
     // Closure lets  remember 'start' in context
-    function runRangeWIthEnd(end2) {
+    function runRangeWIthEnd (end2) {
         return range(start, end2);
     }
 
@@ -24,6 +24,6 @@ range1(3);
 
 if (module !== undefined) {
     module.exports = {
-        range,
+        range
     };
 }

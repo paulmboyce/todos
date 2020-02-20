@@ -91,7 +91,7 @@ test('Check competed', () => {
     // Lets test for empty
     TODO_LIST.todos = [
         { text: 'todo 1', completed: false },
-        { text: 'todo 2', completed: true },
+        { text: 'todo 2', completed: true }
     ];
 
     expect(TODO.checkCompleted(TODO_LIST.todos[0])).toBe(TODO.constants.NOT_DONE);
@@ -152,10 +152,10 @@ test('Special Case: toggle all sets to FALSE if everything is true ', () => {
     }
 });
 
-test('toggleUI component check use of API, for example '
-      + 'that it calls getAttribute, for "item"'
-      + 'much of this is unneccessary because were are testing internal calls rather than funtion effects '
-      + 'but it is an example of using injection of fake (aka MOCK) objects.', () => {
+test('toggleUI component check use of API, for example ' +
+      'that it calls getAttribute, for "item"' +
+      'much of this is unneccessary because were are testing internal calls rather than funtion effects ' +
+      'but it is an example of using injection of fake (aka MOCK) objects.', () => {
     const mockFnGetAttribute = jest.fn(() => 0);
 
     const fakeElement = { getAttribute: mockFnGetAttribute };
@@ -164,7 +164,7 @@ test('toggleUI component check use of API, for example '
     const mockFnDisplay = jest.fn();
     const fakeTodoList = {
         toggleCompleted: mockFnToggleCompleted,
-        display: mockFnDisplay,
+        display: mockFnDisplay
     };
 
     TODO.toggleUIElement(fakeElement, fakeTodoList);
@@ -192,8 +192,8 @@ test('toggleUI component check use of API, for example '
 
 test('Check click event for ADD TODO button', () => {
     // ARRANGE
-    window.document.body.innerHTML = '<button type="button" class="btn btn-warning" id="btn-add-todo">ADD</button>'
-   + '<input type="text" id="inputTodo"/>';
+    window.document.body.innerHTML = '<button type="button" class="btn btn-warning" id="btn-add-todo">ADD</button>' +
+   '<input type="text" id="inputTodo"/>';
 
     const mockFnClickHandler = jest.fn(() => {
         TODO.fnAddTodoClickHandler(TODO_LIST);

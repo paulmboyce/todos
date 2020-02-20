@@ -1,4 +1,4 @@
-const scheduleMeeting = function scheduleMeeting(startHHMM, mins) {
+const scheduleMeeting = function scheduleMeeting (startHHMM, mins) {
     const DAY_START_TIME = (7 * 60) + 30;
     const DAY_END_TIME = (17 * 60) + 45;
     const startTime = startHHMM.split(':');
@@ -16,6 +16,6 @@ const scheduleMeeting = function scheduleMeeting(startHHMM, mins) {
 
 if (typeof module !== 'undefined') {
     module.exports = {
-        scheduleMeeting,
+        scheduleMeeting
     };
 }
