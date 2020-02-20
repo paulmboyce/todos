@@ -1,3 +1,5 @@
+'use strict';
+
 /* eslint-disable block-scoped-var */
 /* eslint-disable no-var */
 /* eslint-disable no-use-before-define */
@@ -152,11 +154,11 @@ function printTo (id, newText) {
     }
 }
 
-function addClickEventHandlersToToggleButtons (injectedTodoList) {
+function addClickEventHandlersToToggleButtons () {
     if (document) {
         document.querySelectorAll('button.toggle')
             .forEach((element) => {
-                element.addEventListener('click', function handleClickEvent () { toggleUIElement(this, injectedTodoList); });
+                element.addEventListener('click', function handleClickEvent () { toggleUIElement(this, window.myTodoApp.todoList); });
             });
     }
 }
@@ -171,22 +173,22 @@ const addClickEventHandler = function addClickEventHandler (elementSelector, fnC
         }
     }
 };
-const fnAddTodoClickHandler = function fnAddTodoClickHandler (injectedTodoList) {
+const fnAddTodoClickHandler = function fnAddTodoClickHandler () {
     if (document) {
         const inputElement = document.querySelector('#inputTodo');
         if (inputElement) {
-            injectedTodoList.add(inputElement.value);
+            window.myTodoApp.todoList.add(inputElement.value);
         }
     }
 };
 // Important: Function Passed including the arguments here.
-addClickEventHandler('button#btn-add-todo', fnAddTodoClickHandler(window.myTodoApp.todoList));
+addClickEventHandler('button#btn-add-todo', fnAddTodoClickHandler);
 
-function fnToggleAllClickHandler (injectedTodoList) {
-    injectedTodoList.toggleAll();
+function fnToggleAllClickHandler () {
+    window.myTodoApp.todoList.toggleAll();
 }
 // Important: Function Passed including the arguments here.
-addClickEventHandler('button#btn-toggle-all', fnToggleAllClickHandler(window.myTodoApp.todoList));
+addClickEventHandler('button#btn-toggle-all', fnToggleAllClickHandler);
 
 if (typeof module !== 'undefined') {
     module.exports = {

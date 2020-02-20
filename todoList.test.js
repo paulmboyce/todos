@@ -178,25 +178,13 @@ test('toggleUI component check use of API, for example ' +
     expect(mockFnDisplay).toBeCalled();
 });
 
-/* test('internals of renderTodosWithEventHandling', () => {
-  // Setup
-  window.document.body.innerHTML = '<div id="id-todos"></div>';
-  TODO.renderTodosWithEventHandling(TODO_LIST);
-
-  //  document.body.querySelector('div#id-todos').innerHTML = '';
-  expect(window.document.querySelector('div#id-todos').valueOf().id).toContain('id-todos');
-  expect(window.document.querySelector('div#id-todos').innerHTML).toContain('button');
-  expect(window.document.querySelector('div#id-todos').innerHTML).toContain('span');
-  expect(window.document.querySelector('div#id-todos').innerHTML).toContain('toggle');
-}); */
-
 test('Check click event for ADD TODO button', () => {
     // ARRANGE
     window.document.body.innerHTML = '<button type="button" class="btn btn-warning" id="btn-add-todo">ADD</button>' +
    '<input type="text" id="inputTodo"/>';
 
     const mockFnClickHandler = jest.fn(() => {
-        TODO.fnAddTodoClickHandler(TODO_LIST);
+        TODO.fnAddTodoClickHandler();
     });
     TODO.addClickEventHandler('button#btn-add-todo', mockFnClickHandler);
 
