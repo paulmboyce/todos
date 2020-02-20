@@ -186,7 +186,7 @@ test('Check click event for ADD TODO button', () => {
     const mockFnClickHandler = jest.fn(() => {
         TODO.fnAddTodoClickHandler();
     });
-    TODO.addClickEventHandler('button#btn-add-todo', mockFnClickHandler);
+    TODO.addClickEventHandlerToAll('button#btn-add-todo', mockFnClickHandler);
 
     // ACT
     document.getElementById('inputTodo').value = 'XYZ';
@@ -203,7 +203,7 @@ test('toggle ALL ', () => {
         TODO_LIST.toggleAll();
     });
     document.body.innerHTML = '<button type="button" id="btn-toggle-all"</button>';
-    TODO.addClickEventHandler('button#btn-toggle-all', mockFnClickHandler);
+    TODO.addClickEventHandlerToAll('button#btn-toggle-all', mockFnClickHandler);
 
     // ACT
     document.getElementById('btn-toggle-all').click();

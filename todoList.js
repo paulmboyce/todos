@@ -163,17 +163,16 @@ function addClickEventHandlersToToggleButtons () {
     }
 }
 
-// Three functions together to setup click handlug in a testable mnner.
-
-const addClickEventHandler = function addClickEventHandler (elementSelector, fnClickHandler) {
+function addClickEventHandlerToAll (elementSelector, fnClickHandler) {
     if (document) {
-        const btnAddTodo = document.querySelector(elementSelector);
-        if (btnAddTodo) {
-            btnAddTodo.addEventListener('click', fnClickHandler);
-        }
+        document.querySelectorAll(elementSelector)
+            .forEach((element) => {
+                element.addEventListener('click', fnClickHandler);
+            });
     }
-};
-const fnAddTodoClickHandler = function fnAddTodoClickHandler () {
+}
+
+const addTodoClickHandler = function () {
     if (document) {
         const inputElement = document.querySelector('#inputTodo');
         if (inputElement) {
@@ -181,14 +180,29 @@ const fnAddTodoClickHandler = function fnAddTodoClickHandler () {
         }
     }
 };
-// Important: Function Passed including the arguments here.
-addClickEventHandler('button#btn-add-todo', fnAddTodoClickHandler);
 
-function fnToggleAllClickHandler () {
-    window.myTodoApp.todoList.toggleAll();
+var clickHandlers = [
+    {
+        selector: 'button#btn-add-todo',
+        handler: addTodoClickHandler
+    },
+    {
+        selector: 'button#btn-toggle-all',
+        handler: () => { window.myTodoApp.todoList.toggleAll(); }
+    },
+    {
+        selector: 'button.toggle',
+        handler: () => { toggleUIElement(this, window.myTodoApp.todoList); }
+    }
+];
+
+function registerClickHandlers () {
+    clickHandlers.forEach((handler) => {
+        addClickEventHandlerToAll(handler.selector, handler.handler);
+    });
 }
-// Important: Function Passed including the arguments here.
-addClickEventHandler('button#btn-toggle-all', fnToggleAllClickHandler);
+
+registerClickHandlers();
 
 if (typeof module !== 'undefined') {
     module.exports = {
@@ -198,7 +212,7 @@ if (typeof module !== 'undefined') {
         constants: { DONE, NOT_DONE },
         toggleUIElement,
         renderTodosWithEventHandling,
-        addClickEventHandler,
-        fnAddTodoClickHandler
+        fnAddTodoClickHandler: addTodoClickHandler,
+        addClickEventHandlerToAll
     };
 }
