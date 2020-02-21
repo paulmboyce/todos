@@ -116,10 +116,10 @@ function buildElements (todos) {
     const numTodos = todos.length;
     let html = '';
     for (let i = 0; i < numTodos; i += 1) {
-        let element = `<button type="button" item="${i}" class="btn btn-small btn-info toggle">${checkCompleted(todos[i])}</button>`;
-        element += `<span>${todos[i].text}</span>`;
-        element += `<span item="${i}" class="delete" onclick='deleteUITodo(this);'> X</span>`;
-        element += '<br/>';
+        let element = `<div class='todo-container'><button type="button" item="${i}" class="btn btn-small btn-info toggle">${checkCompleted(todos[i])}</button>`;
+        element += `<textarea class="todo" rows='1' cols='50' disabled readonly>${todos[i].text}</textarea>`;
+        element += `<button item="${i}" class="delete btn btn-small btn-info" onclick='deleteUITodo(this);'> Delete [X]</button>`;
+        element += '</div>';
         html = element + html; // prepend
     }
     return html;
@@ -147,7 +147,7 @@ function deleteUITodo (el) {
 }
 
 function printTo (id, newText) {
-    // Validate web context exists.Else default to console
+    // Validate web context exists.
     if (window.document) {
         const target = window.document.querySelector(`#${id}`);
         target.innerHTML = newText;
@@ -177,6 +177,8 @@ const addTodoClickHandler = function () {
         const inputElement = document.querySelector('#inputTodo');
         if (inputElement) {
             window.myTodoApp.todoList.add(inputElement.value);
+            inputElement.value = '';
+            inputElement.focus();
         }
     }
 };
