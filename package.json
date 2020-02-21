@@ -31,13 +31,15 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "husky": "^4.2.3",
-    "jest": "^25.1.0"
+    "jest": "^25.1.0",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
   },
   "scripts": {
     "test": "jest",
-    "watch": "jest --watch *.js",
+    "watch": "jest --watch src/*.js",
     "coverage": "jest --coverage",
-    "lint": "eslint *.js --fix"
+    "lint": "eslint src/*.js --fix"
   },
   "author": "",
   "license": "ISC"
