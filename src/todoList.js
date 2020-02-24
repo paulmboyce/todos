@@ -78,7 +78,7 @@ const todoList = {
 };
 
 function renderTodosWithEventHandling (injectedTodoList) {
-    const elements = buildElements(injectedTodoList.todos);
+    const elements = buildTodoRows(injectedTodoList.todos);
     if (document) {
         const target = document.querySelector('div#id-todos');
         if (target) {
@@ -86,6 +86,7 @@ function renderTodosWithEventHandling (injectedTodoList) {
         }
     }
     addClickEventHandlersToToggleButtons(injectedTodoList);
+    addClickEventHandlersToDeleteButtons(injectedTodoList);
 }
 
 function buildMessage (todos) {
@@ -103,13 +104,13 @@ function buildMessage (todos) {
     return message;
 }
 
-function buildElements (todos) {
+function buildTodoRows (todos) {
     const numTodos = todos.length;
     let html = '';
     for (let i = 0; i < numTodos; i += 1) {
         let element = `<div class='todo-container'><button type="button" item="${i}" class="btn btn-small btn-info toggle">${checkCompleted(todos[i])}</button>`;
         element += `<textarea class="todo" rows='1' cols='50' disabled readonly>${todos[i].text}</textarea>`;
-        element += `<button item="${i}" class="delete btn btn-small btn-info" onclick='myTodoApp.todoList.deleteUITodo(this);'> Delete [X]</button>`;
+        element += `<button item="${i}" class="delete btn btn-small btn-info" > Delete [X]</button>`;
         element += '</div>';
         html = element + html; // prepend
     }
@@ -130,13 +131,6 @@ function toggleUIElement (el, injectedTodoList) {
     injectedTodoList.display();
 }
 
-// This is called from dynamically HTML code.
-// eslint-disable-next-line no-unused-vars
-const deleteUITodo = function deleteUITodo (el) {
-    const position = el.getAttribute('item');
-    todoList.delete(position);
-};
-
 function printTo (id, newText) {
     // Validate web context exists.
     if (document) {
@@ -155,6 +149,18 @@ function addClickEventHandlersToToggleButtons () {
             });
     }
 }
+
+function addClickEventHandlersToDeleteButtons () {
+    if (document) {
+        document.querySelectorAll('button.delete')
+            .forEach((element) => {
+                element.addEventListener('click', function handleClickEvent () { myTodoApp.todoList.deleteUITodo(this); });
+            });
+    }
+}
+
+
+
 
 function addClickEventHandlerToAll (elementSelector, fnClickHandler) {
     if (document) {
