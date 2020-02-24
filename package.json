@@ -33,13 +33,21 @@
     "husky": "^4.2.3",
     "jest": "^25.1.0",
     "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   },
   "scripts": {
     "test": "jest",
-    "watch": "jest --watch src/*.js",
+    "watch:main": "jest --watch *.js",
+    "watch:src": "jest --watch src/*.js",
+    "watch": "npm run watch:main & npm run watch:src",
     "coverage": "jest --coverage",
-    "lint": "eslint src/*.js --fix"
+    "lint:main": "eslint *.js --fix",
+    "lint:src": "eslint src/*.js --fix",
+    "lint": "npm run lint:main & npm run lint:src",
+    "clean": "rm dist/bundle.js",
+    "build:dev": "webpack --config webpack.DEV.config.js",
+    "start:dev": "webpack-dev-server  --config webpack.DEV.config.js"
   },
   "author": "",
   "license": "ISC"

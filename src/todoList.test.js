@@ -1,11 +1,9 @@
-/* eslint-disable jest/no-commented-out-tests */
 const TODO = require('./todoList');
 
-const { todoList: TODO_LIST } = TODO;
+const TODO_LIST = TODO.todoList;
 
 test('can add a todo', () => {
     const numTodos = TODO_LIST.todos.length;
-
     const result = TODO_LIST.add('Buy Coffee at Starbucks');
 
     // validate list has grown by 1
@@ -211,9 +209,3 @@ test('toggle ALL ', () => {
     // ASSERT
     expect(mockFnClickHandler).toHaveBeenCalled();
 });
-
-/*
-test(' do we need babel?? ', () => {
-  expect(1).toEqual(2);
-});
-*/

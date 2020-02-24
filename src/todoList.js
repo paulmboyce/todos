@@ -1,24 +1,10 @@
 'use strict';
 
-/* eslint-disable block-scoped-var */
-/* eslint-disable no-var */
-/* eslint-disable no-use-before-define */
 // const
 const NOT_DONE = '&nbsp;.&nbsp;';
 const DONE = '&#10003;';
 
-// Context defence for testing outwith broswer.
-// eslint-disable-next-line no-use-before-define
-// eslint-disable-next-line block-scoped-var
-// eslint-disable-next-line no-use-before-define
-// eslint-disable-next-line block-scoped-var
-if (typeof window === 'undefined') {
-    // eslint-disable-next-line vars-on-top
-    var window = {};
-}
-
-// eslint-disable-next-line block-scoped-var
-window.myTodoApp = { todoList: [] };
+var myTodoApp;
 
 const todoList = {
     // format: { text: 'todo 1', completed: false }, { text: 'todo 2', completed: false }]
@@ -83,16 +69,21 @@ const todoList = {
         }
         // Update UI.
         this.display();
+    },
+    deleteUITodo (el) {
+        const position = el.getAttribute('item');
+        todoList.delete(position);
     }
 
 };
 
-window.myTodoApp.todoList = todoList;
-
 function renderTodosWithEventHandling (injectedTodoList) {
     const elements = buildElements(injectedTodoList.todos);
-    if (window && window.document) {
-        window.document.querySelector('div#id-todos').innerHTML = elements;
+    if (document) {
+        const target = document.querySelector('div#id-todos');
+        if (target) {
+            target.innerHTML = elements;
+        }
     }
     addClickEventHandlersToToggleButtons(injectedTodoList);
 }
@@ -118,7 +109,7 @@ function buildElements (todos) {
     for (let i = 0; i < numTodos; i += 1) {
         let element = `<div class='todo-container'><button type="button" item="${i}" class="btn btn-small btn-info toggle">${checkCompleted(todos[i])}</button>`;
         element += `<textarea class="todo" rows='1' cols='50' disabled readonly>${todos[i].text}</textarea>`;
-        element += `<button item="${i}" class="delete btn btn-small btn-info" onclick='deleteUITodo(this);'> Delete [X]</button>`;
+        element += `<button item="${i}" class="delete btn btn-small btn-info" onclick='myTodoApp.todoList.deleteUITodo(this);'> Delete [X]</button>`;
         element += '</div>';
         html = element + html; // prepend
     }
@@ -141,16 +132,18 @@ function toggleUIElement (el, injectedTodoList) {
 
 // This is called from dynamically HTML code.
 // eslint-disable-next-line no-unused-vars
-function deleteUITodo (el) {
+const deleteUITodo = function deleteUITodo (el) {
     const position = el.getAttribute('item');
     todoList.delete(position);
-}
+};
 
 function printTo (id, newText) {
     // Validate web context exists.
-    if (window.document) {
-        const target = window.document.querySelector(`#${id}`);
-        target.innerHTML = newText;
+    if (document) {
+        const target = document.querySelector(`#${id}`);
+        if (target) {
+            target.innerHTML = newText;
+        }
     }
 }
 
@@ -158,7 +151,7 @@ function addClickEventHandlersToToggleButtons () {
     if (document) {
         document.querySelectorAll('button.toggle')
             .forEach((element) => {
-                element.addEventListener('click', function handleClickEvent () { toggleUIElement(this, window.myTodoApp.todoList); });
+                element.addEventListener('click', function handleClickEvent () { toggleUIElement(this, myTodoApp.todoList); });
             });
     }
 }
@@ -176,7 +169,7 @@ const addTodoClickHandler = function () {
     if (document) {
         const inputElement = document.querySelector('#inputTodo');
         if (inputElement) {
-            window.myTodoApp.todoList.add(inputElement.value);
+            myTodoApp.todoList.add(inputElement.value);
             inputElement.value = '';
             inputElement.focus();
         }
@@ -190,11 +183,11 @@ var clickHandlers = [
     },
     {
         selector: 'button#btn-toggle-all',
-        handler: () => { window.myTodoApp.todoList.toggleAll(); }
+        handler: () => { myTodoApp.todoList.toggleAll(); }
     },
     {
         selector: 'button.toggle',
-        handler: () => { toggleUIElement(this, window.myTodoApp.todoList); }
+        handler: () => { toggleUIElement(this, myTodoApp.todoList); }
     }
 ];
 
@@ -204,7 +197,17 @@ function registerClickHandlers () {
     });
 }
 
-registerClickHandlers();
+myTodoApp = { todoList: todoList };
+
+if (document !== undefined) {
+    document.addEventListener('DOMContentLoaded', (event) => {
+    // eslint-disable-next-line block-scoped-var
+        global.HELLO = 'hey';
+        global.myTodoApp = myTodoApp;
+        //  global.myTodoApp.deleteUITodo = deleteUITodo;
+        registerClickHandlers();
+    });
+}
 
 if (typeof module !== 'undefined') {
     module.exports = {
