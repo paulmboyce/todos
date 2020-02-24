@@ -4,8 +4,6 @@
 const NOT_DONE = '&nbsp;.&nbsp;';
 const DONE = '&#10003;';
 
-var myTodoApp;
-
 const todoList = {
     // format: { text: 'todo 1', completed: false }, { text: 'todo 2', completed: false }]
     todos: [],
@@ -145,7 +143,7 @@ function addClickEventHandlersToToggleButtons () {
     if (document) {
         document.querySelectorAll('button.toggle')
             .forEach((element) => {
-                element.addEventListener('click', function handleClickEvent () { toggleUIElement(this, myTodoApp.todoList); });
+                element.addEventListener('click', function handleClickEvent () { toggleUIElement(this, todoList); });
             });
     }
 }
@@ -154,13 +152,10 @@ function addClickEventHandlersToDeleteButtons () {
     if (document) {
         document.querySelectorAll('button.delete')
             .forEach((element) => {
-                element.addEventListener('click', function handleClickEvent () { myTodoApp.todoList.deleteUITodo(this); });
+                element.addEventListener('click', function handleClickEvent () { todoList.deleteUITodo(this); });
             });
     }
 }
-
-
-
 
 function addClickEventHandlerToAll (elementSelector, fnClickHandler) {
     if (document) {
@@ -175,7 +170,7 @@ const addTodoClickHandler = function () {
     if (document) {
         const inputElement = document.querySelector('#inputTodo');
         if (inputElement) {
-            myTodoApp.todoList.add(inputElement.value);
+            todoList.add(inputElement.value);
             inputElement.value = '';
             inputElement.focus();
         }
@@ -189,11 +184,11 @@ var clickHandlers = [
     },
     {
         selector: 'button#btn-toggle-all',
-        handler: () => { myTodoApp.todoList.toggleAll(); }
+        handler: () => { todoList.toggleAll(); }
     },
     {
         selector: 'button.toggle',
-        handler: () => { toggleUIElement(this, myTodoApp.todoList); }
+        handler: () => { toggleUIElement(this, todoList); }
     }
 ];
 
@@ -203,14 +198,8 @@ function registerClickHandlers () {
     });
 }
 
-myTodoApp = { todoList: todoList };
-
 if (document !== undefined) {
     document.addEventListener('DOMContentLoaded', (event) => {
-    // eslint-disable-next-line block-scoped-var
-        global.HELLO = 'hey';
-        global.myTodoApp = myTodoApp;
-        //  global.myTodoApp.deleteUITodo = deleteUITodo;
         registerClickHandlers();
     });
 }
