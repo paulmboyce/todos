@@ -106,9 +106,9 @@ function buildTodoRows (todos) {
     const numTodos = todos.length;
     let html = '';
     for (let i = 0; i < numTodos; i += 1) {
-        let element = `<div class='todo-container'><button type="button" item="${i}" class="btn btn-small btn-info toggle">${checkCompleted(todos[i])}</button>`;
-        element += `<textarea class="todo" rows='1' cols='50' disabled readonly>${todos[i].text}</textarea>`;
-        element += `<button item="${i}" class="delete btn btn-small btn-info" > Delete [X]</button>`;
+        let element = `<div><button type="button" item="${i}" class="btn matrix-chalk-purple toggle">${checkCompleted(todos[i])}</button>`;
+        element += `<span class="todo matrix-chalk-purple" rows='1' cols='50' disabled readonly>${todos[i].text}</span>`;
+        element += `<button item="${i}" class="delete btn matrix-chalk-purple" > Delete [X]</button>`;
         element += '</div>';
         html = element + html; // prepend
     }
