@@ -4,7 +4,7 @@
   "description": "Following https://watchandcode.com/ practical-javascript",
   "main": "todoList.js",
   "dependencies": {},
-  "type": "commonjs",
+  "type": "module",
   "jest": {
     "testMatch": [
       "**/__tests__/**/*.?(m)js?(x)",
@@ -61,8 +61,8 @@
     "coverage": "jest --coverage",
     "lint": "eslint src/*.js src/*.mjs test/*.js test/*.mjs --fix",
     "clean": "rm dist/bundle.js",
-    "build:dev": "webpack --config webpack.DEV.config.js",
-    "start:dev": "webpack-dev-server  --config webpack.DEV.config.js"
+    "build:dev": "webpack --config webpack.DEV.config.cjs",
+    "start:dev": "webpack-dev-server  --config webpack.DEV.config.cjs"
   },
   "author": "",
   "license": "ISC"
