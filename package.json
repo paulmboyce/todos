@@ -4,13 +4,21 @@
   "description": "Following https://watchandcode.com/ practical-javascript",
   "main": "todoList.js",
   "dependencies": {},
+  "type": "module",
   "jest": {
     "collectCoverageFrom": [
       "**/*.{js,jsx}",
       "!**/node_modules/**",
       "!**/coverage/**"
-    ]
+    ],
+    "transform": {
+      "^.+\\.js?$": "babel-jest"
+    }
   },
+  "babel" : {
+    "presets": ["@babel/preset-env"]
+  },
+  
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint && npm run coverage",
@@ -22,11 +30,13 @@
     "url": "https://github.com/paulmboyce/todos.git"
   },
   "devDependencies": {
-    "eslint": "^6.1.0",
+    "@babel/preset-env": "^7.8.6",
+    "babel-jest": "^25.1.0",
+    "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-jest": "^23.7.0",
+    "eslint-plugin-jest": "^23.8.0",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
@@ -38,13 +48,9 @@
   },
   "scripts": {
     "test": "jest",
-    "watch:main": "jest --watch *.js",
-    "watch:src": "jest --watch src/*.js",
-    "watch": "npm run watch:main & npm run watch:src",
+    "watch": "jest --watch src/*.js  test/*.js",
     "coverage": "jest --coverage",
-    "lint:main": "eslint *.js --fix",
-    "lint:src": "eslint src/*.js --fix",
-    "lint": "npm run lint:main & npm run lint:src",
+    "lint": "eslint src/*.js test/*.js --fix",
     "clean": "rm dist/bundle.js",
     "build:dev": "webpack --config webpack.DEV.config.js",
     "start:dev": "webpack-dev-server  --config webpack.DEV.config.js"
