@@ -1,4 +1,4 @@
-const Closure = require('./closure');
+const Closure = require('../src/closure');
 
 test('returns [3] for range (3,3)', () => {
     // ARRANGE

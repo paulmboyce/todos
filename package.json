@@ -4,21 +4,30 @@
   "description": "Following https://watchandcode.com/ practical-javascript",
   "main": "todoList.js",
   "dependencies": {},
-  "type": "module",
+  "type": "commonjs",
   "jest": {
+    "testMatch": [
+      "**/__tests__/**/*.?(m)js?(x)",
+      "**/?(*.)(spec|test).?(m)js?(x)"
+      ],
     "collectCoverageFrom": [
-      "**/*.{js,jsx}",
+      "**/*.{js,jsx,mjs}",
       "!**/node_modules/**",
       "!**/coverage/**"
     ],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "mjs"
+      ],
     "transform": {
-      "^.+\\.js?$": "babel-jest"
+      "^.+\\.mjs$": "babel-jest"
     }
   },
   "babel" : {
     "presets": ["@babel/preset-env"]
   },
-  
+
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint && npm run coverage",
@@ -48,9 +57,9 @@
   },
   "scripts": {
     "test": "jest",
-    "watch": "jest --watch src/*.js  test/*.js",
+    "watch": "jest --watch --no-cache src/*.js src/*.mjs  test/*.js test/*.mjs",
     "coverage": "jest --coverage",
-    "lint": "eslint src/*.js test/*.js --fix",
+    "lint": "eslint src/*.js src/*.mjs test/*.js test/*.mjs --fix",
     "clean": "rm dist/bundle.js",
     "build:dev": "webpack --config webpack.DEV.config.js",
     "start:dev": "webpack-dev-server  --config webpack.DEV.config.js"

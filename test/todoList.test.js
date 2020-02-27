@@ -1,4 +1,4 @@
-const TODO = require('./todoList');
+const TODO = require('../src/todoList');
 
 const TODO_LIST = TODO.todoList;
 

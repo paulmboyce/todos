@@ -1,4 +1,4 @@
-const Scheduler = require('./ydnJSPractice');
+const Scheduler = require('../src/ydnJSPractice');
 
 it('schedules Meeting 1', () => {
     expect(Scheduler.scheduleMeeting('7:00', 15)).toBe(false);
