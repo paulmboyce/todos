@@ -1,8 +1,5 @@
-'use strict';
 
-// const
-const NOT_DONE = '&nbsp;.&nbsp;';
-const DONE = '&#10003;';
+import { DONE, NOT_DONE } from '../src/constants.mjs';
 
 const todoList = {
     // format: { text: 'todo 1', completed: false }, { text: 'todo 2', completed: false }]
@@ -208,11 +205,10 @@ export {
     todoList,
     buildMessage,
     checkCompleted,
-    /*       constants as { DONE, NOT_DONE }, */
     toggleUIElement,
     renderTodosWithEventHandling,
     addTodoClickHandler,
     addClickEventHandlerToAll
 };
 
-export { DONE, NOT_DONE };
+export { DONE, NOT_DONE } from '../src/constants.mjs';
