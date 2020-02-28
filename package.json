@@ -13,7 +13,8 @@
     "collectCoverageFrom": [
       "**/*.{js,jsx,mjs}",
       "!**/node_modules/**",
-      "!**/coverage/**"
+      "!**/coverage/**",
+      "!**/dist/**"
     ],
     "moduleFileExtensions": [
       "js",
