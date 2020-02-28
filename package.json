@@ -57,7 +57,7 @@
   },
   "scripts": {
     "test": "jest",
-    "watch": "jest --watch --no-cache src/*.js src/*.mjs  test/*.js test/*.mjs",
+    "watch": "jest --watch src/*.js src/*.mjs  test/*.js test/*.mjs",
     "coverage": "jest --coverage",
     "lint": "eslint src/*.js src/*.mjs test/*.js test/*.mjs --fix",
     "clean": "rm dist/bundle.js",
