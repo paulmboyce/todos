@@ -74,10 +74,11 @@ const todoList = {
         console.log(`clicked ${el} ${position}`);
 
         const inputEdit = document.querySelector(`input.todo[item="${position}"]`);
+        addSaveEditedTodoClickEventHandlerToEditField(inputEdit);
         inputEdit.removeAttribute('disabled');
         inputEdit.focus();
 
-        // TODO 
+        // TODO
         alert('TODO: MAke the text area be save on click return');
     }
 };
@@ -115,9 +116,8 @@ function buildTodoRows (todos) {
     let html = '';
     for (let i = 0; i < numTodos; i += 1) {
         let element = `<div><button type="button" item="${i}" class="btn matrix-chalk-purple toggle">${checkCompleted(todos[i])}</button>`;
-        element += `<input disabled item="${i}" class="todo matrix-chalk-purple" cols="20" value="${todos[i].text}"></input>`;
+        element += `<input item="${i}" class="todo matrix-chalk-purple" cols="20" value="${todos[i].text}"></input>`;
         element += `<button item="${i}" class="delete btn matrix-chalk-purple" > Delete [X]</button>`;
-        element += `<button item="${i}" class="edit btn btn-success" > EDIT</button>`;
         element += '</div>';
         html = element + html; // prepend
     }
@@ -167,10 +167,22 @@ function addClickEventHandlersToDeleteButtons () {
 }
 function addClickEventHandlersToEditButtons () {
     if (document) {
-        document.querySelectorAll('button.edit')
+        document.querySelectorAll('input.todo')
             .forEach((element) => {
                 element.addEventListener('click', function handleClickEvent () { todoList.editUITodo(this); });
             });
+    }
+}
+
+function addSaveEditedTodoClickEventHandlerToEditField (el) {
+    if (document) {
+        el.addEventListener('keypress', function handleReturn (evt) {
+            if (evt.key === 'Enter') {
+                saveEditedTodoClickHandler(el);
+                el.removeEventListener('keypress', handleReturn);
+                el.addAttribute('disabled');
+            }
+        });
     }
 }
 
@@ -192,6 +204,10 @@ const addTodoClickHandler = function () {
             inputElement.focus();
         }
     }
+};
+
+const saveEditedTodoClickHandler = function (el) {
+    todoList.change(el.getAttribute('item'), el.value);
 };
 
 function exists (obj) {
