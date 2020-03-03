@@ -113,8 +113,8 @@ function buildTodoRows (todos) {
     let html = '';
     for (let i = 0; i < numTodos; i += 1) {
         let element = `<div><button type="button" item="${i}" class="btn matrix-chalk-purple toggle">${checkCompleted(todos[i])}</button>`;
-        element += `<input type="text" item="${i}" class="todo matrix-chalk-purple" size="50" value="${todos[i].text}"></input>`;
-        element += `<button item="${i}" class="delete btn matrix-chalk-purple" > Delete [X]</button>`;
+        element += `<input type="text" item="${i}" class="todo matrix-chalk-purple ${todos[i].completed ? 'complete' : ''}" size="50" value="${todos[i].text}"></input>`;
+        element += `<button item="${i}" class="delete btn matrix-chalk-purple" >&nbsp;[X]&nbsp;</button>`;
         element += '</div>';
         html = element + html; // prepend
     }
@@ -246,7 +246,7 @@ var clickHandlers = [
 
 function registerMainClickHandlers () {
     clickHandlers.forEach((handler) => {
-        addClickEventHandlerToAll(handler.selector, handler.action, handler.handler);
+        addEventHandlerToAll(handler.selector, handler.action, handler.handler);
     });
 }
 
