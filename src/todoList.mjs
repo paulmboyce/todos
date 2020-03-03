@@ -77,9 +77,6 @@ const todoList = {
         addSaveEditedTodoClickEventHandlerToEditField(inputEdit);
         inputEdit.removeAttribute('disabled');
         inputEdit.focus();
-
-        // TODO
-        alert('TODO: MAke the text area be save on click return');
     }
 };
 
@@ -116,7 +113,7 @@ function buildTodoRows (todos) {
     let html = '';
     for (let i = 0; i < numTodos; i += 1) {
         let element = `<div><button type="button" item="${i}" class="btn matrix-chalk-purple toggle">${checkCompleted(todos[i])}</button>`;
-        element += `<input item="${i}" class="todo matrix-chalk-purple" cols="20" value="${todos[i].text}"></input>`;
+        element += `<input type="text" item="${i}" class="todo matrix-chalk-purple" size="50" value="${todos[i].text}"></input>`;
         element += `<button item="${i}" class="delete btn matrix-chalk-purple" > Delete [X]</button>`;
         element += '</div>';
         html = element + html; // prepend
@@ -187,10 +184,14 @@ function addSaveEditedTodoClickEventHandlerToEditField (el) {
 }
 
 function addClickEventHandlerToAll (elementSelector, fnClickHandler) {
+    addEventHandlerToAll(elementSelector, 'click', fnClickHandler);
+}
+
+function addEventHandlerToAll (elementSelector, action, fnClickHandler) {
     if (document) {
         document.querySelectorAll(elementSelector)
             .forEach((element) => {
-                element.addEventListener('click', fnClickHandler);
+                element.addEventListener(action, fnClickHandler);
             });
     }
 }
@@ -206,6 +207,12 @@ const addTodoClickHandler = function () {
     }
 };
 
+const addTodoKeypressHandler = function (evt) {
+    if (evt.key === 'Enter') {
+        addTodoClickHandler();
+    }
+};
+
 const saveEditedTodoClickHandler = function (el) {
     todoList.change(el.getAttribute('item'), el.value);
 };
@@ -217,21 +224,29 @@ function exists (obj) {
 var clickHandlers = [
     {
         selector: 'button#btn-add-todo',
+        action: 'click',
         handler: addTodoClickHandler
     },
     {
+        selector: 'input#inputTodo',
+        action: 'keypress',
+        handler: addTodoKeypressHandler
+    },
+    {
         selector: 'button#btn-toggle-all',
+        action: 'click',
         handler: () => { todoList.toggleAll(); }
     },
     {
         selector: 'button.toggle',
+        action: 'click',
         handler: () => { toggleUIElement(this, todoList); }
     }
 ];
 
 function registerMainClickHandlers () {
     clickHandlers.forEach((handler) => {
-        addClickEventHandlerToAll(handler.selector, handler.handler);
+        addClickEventHandlerToAll(handler.selector, handler.action, handler.handler);
     });
 }
 
