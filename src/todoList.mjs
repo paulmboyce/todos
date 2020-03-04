@@ -75,7 +75,6 @@ const todoList = {
 
         const inputEdit = document.querySelector(`input.todo[item="${position}"]`);
         addSaveEditedTodoClickEventHandlerToEditField(inputEdit);
-        inputEdit.removeAttribute('disabled');
         inputEdit.focus();
     }
 };
@@ -175,7 +174,7 @@ function addSaveEditedTodoClickEventHandlerToEditField (el) {
     if (document) {
         el.addEventListener('keypress', function handleReturn (evt) {
             if (evt.key === 'Enter') {
-                saveEditedTodoClickHandler(el);
+                saveEditedTodo(el);
                 el.removeEventListener('keypress', handleReturn);
                 el.addAttribute('disabled');
             }
@@ -196,56 +195,63 @@ function addEventHandlerToAll (elementSelector, action, fnClickHandler) {
     }
 }
 
-const addTodoClickHandler = function () {
-    if (exists(document)) {
-        const inputElement = document.querySelector('#inputTodo');
-        if (exists(inputElement)) {
-            todoList.add(inputElement.value);
-            inputElement.value = '';
-            inputElement.focus();
-        }
-    }
-};
-
-const addTodoKeypressHandler = function (evt) {
-    if (evt.key === 'Enter') {
-        addTodoClickHandler();
-    }
-};
-
-const saveEditedTodoClickHandler = function (el) {
-    todoList.change(el.getAttribute('item'), el.value);
+const saveEditedTodo = function (todoElement) {
+    todoList.change(todoElement.getAttribute('item'), todoElement.value);
 };
 
 function exists (obj) {
     return (typeof obj !== 'undefined');
 }
 
-var clickHandlers = [
+const uiReactors = {
+    addTodoClickHandler: function () {
+        if (exists(document)) {
+            const inputElement = document.querySelector('#inputTodo');
+            if (exists(inputElement)) {
+                todoList.add(inputElement.value);
+                inputElement.value = '';
+                inputElement.focus();
+            }
+        }
+    },
+    addTodoKeypressHandler: function (evt) {
+        if (evt.key === 'Enter') {
+            uiReactors.addTodoClickHandler();
+        }
+    },
+    toggleAllClickHandler: function () {
+        todoList.toggleAll();
+    },
+    toggleTodoClickHandler: function (evt) {
+        toggleUIElement(evt.target, todoList);
+    }
+};
+
+const elementActionHandlers = [
     {
         selector: 'button#btn-add-todo',
         action: 'click',
-        handler: addTodoClickHandler
+        handler: uiReactors.addTodoClickHandler
     },
     {
         selector: 'input#inputTodo',
         action: 'keypress',
-        handler: addTodoKeypressHandler
+        handler: uiReactors.addTodoKeypressHandler
     },
     {
         selector: 'button#btn-toggle-all',
         action: 'click',
-        handler: () => { todoList.toggleAll(); }
+        handler: uiReactors.toggleAllClickHandler
     },
     {
         selector: 'button.toggle',
         action: 'click',
-        handler: () => { toggleUIElement(this, todoList); }
+        handler: uiReactors.toggleTodoClickHandler
     }
 ];
 
 function registerMainClickHandlers () {
-    clickHandlers.forEach((handler) => {
+    elementActionHandlers.forEach((handler) => {
         addEventHandlerToAll(handler.selector, handler.action, handler.handler);
     });
 }
@@ -262,7 +268,7 @@ export {
     checkCompleted,
     toggleUIElement,
     renderTodosWithEventHandling,
-    addTodoClickHandler,
+    uiReactors,
     addClickEventHandlerToAll
 };
 

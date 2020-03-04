@@ -1,6 +1,7 @@
 import * as TODO from '../src/todoList.mjs';
 
 const TODO_LIST = TODO.todoList;
+const TODO_REACTORS = TODO.uiReactors;
 
 test('can add a todo', () => {
     const numTodos = TODO_LIST.todos.length;
@@ -182,7 +183,7 @@ test('Check click event for ADD TODO button', () => {
    '<input type="text" id="inputTodo"/>';
 
     const mockFnClickHandler = jest.fn(() => {
-        TODO.addTodoClickHandler();
+        TODO_REACTORS.addTodoClickHandler();
     });
     TODO.addClickEventHandlerToAll('button#btn-add-todo', mockFnClickHandler);
 
