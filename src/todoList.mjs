@@ -74,7 +74,6 @@ const todoList = {
         console.log(`clicked ${el} ${position}`);
 
         const inputEdit = document.querySelector(`input.todo[item="${position}"]`);
-        addSaveEditedTodoClickEventHandlerToEditField(inputEdit);
         inputEdit.focus();
     }
 };
@@ -151,6 +150,11 @@ const todoElementReactors = {
     },
     editTodoClickHandler (evt) {
         todoList.editUITodo(evt.target);
+    },
+    saveTodoClickHandler (evt) {
+        if (evt.key === 'Enter') {
+            saveEditedTodo(evt.target);
+        }
     }
 };
 
@@ -169,21 +173,13 @@ const todoElementActionHandlers = [
         selector: 'input.todo',
         action: 'click',
         handler: todoElementReactors.editTodoClickHandler
+    },
+    {
+        selector: 'input.todo[item]',
+        action: 'keypress',
+        handler: todoElementReactors.saveTodoClickHandler
     }
-
 ];
-
-function addSaveEditedTodoClickEventHandlerToEditField (el) {
-    if (document) {
-        el.addEventListener('keypress', function handleReturn (evt) {
-            if (evt.key === 'Enter') {
-                saveEditedTodo(el);
-                el.removeEventListener('keypress', handleReturn);
-                el.addAttribute('disabled');
-            }
-        });
-    }
-}
 
 const saveEditedTodo = function (todoElement) {
     todoList.change(todoElement.getAttribute('item'), todoElement.value);
