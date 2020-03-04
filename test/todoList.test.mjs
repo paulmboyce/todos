@@ -185,7 +185,7 @@ test('Check click event for ADD TODO button', () => {
     const mockFnClickHandler = jest.fn(() => {
         TODO_REACTORS.addTodoClickHandler();
     });
-    TODO.addClickEventHandlerToAll('button#btn-add-todo', mockFnClickHandler);
+    TODO.addEventHandlerToAll('button#btn-add-todo', 'click', mockFnClickHandler);
 
     // ACT
     document.getElementById('inputTodo').value = 'XYZ';
@@ -202,11 +202,15 @@ test('toggle ALL ', () => {
         TODO_LIST.toggleAll();
     });
     document.body.innerHTML = '<button type="button" id="btn-toggle-all"</button>';
-    TODO.addClickEventHandlerToAll('button#btn-toggle-all', mockFnClickHandler);
+    TODO.addEventHandlerToAll('button#btn-toggle-all', 'click', mockFnClickHandler);
 
     // ACT
     document.getElementById('btn-toggle-all').click();
 
     // ASSERT
     expect(mockFnClickHandler).toHaveBeenCalled();
+});
+
+test(' >>>NEXT: It should remember the list on refresh ..!!', () => {
+    console.log(' >>>\n----> NEXT: It should remember the list on refresh ..!!\n<<<');
 });

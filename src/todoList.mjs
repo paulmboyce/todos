@@ -87,9 +87,7 @@ function renderTodosWithEventHandling (injectedTodoList) {
             target.innerHTML = elements;
         }
     }
-    addClickEventHandlersToToggleButtons(injectedTodoList);
-    addClickEventHandlersToDeleteButtons(injectedTodoList);
-    addClickEventHandlersToEditButtons(injectedTodoList);
+    registerTodoClickHandlers();
 }
 
 function buildMessage (todos) {
@@ -144,31 +142,36 @@ function printTo (id, newText) {
     }
 }
 
-function addClickEventHandlersToToggleButtons () {
-    if (document) {
-        document.querySelectorAll('button.toggle')
-            .forEach((element) => {
-                element.addEventListener('click', function handleClickEvent () { toggleUIElement(this, todoList); });
-            });
+const todoElementReactors = {
+    toggleButtonClickHandler (evt) {
+        toggleUIElement(evt.target, todoList);
+    },
+    deleteTodoClickHandler (evt) {
+        todoList.deleteUITodo(evt.target);
+    },
+    editTodoClickHandler (evt) {
+        todoList.editUITodo(evt.target);
     }
-}
+};
 
-function addClickEventHandlersToDeleteButtons () {
-    if (document) {
-        document.querySelectorAll('button.delete')
-            .forEach((element) => {
-                element.addEventListener('click', function handleClickEvent () { todoList.deleteUITodo(this); });
-            });
+const todoElementActionHandlers = [
+    {
+        selector: 'button.toggle',
+        action: 'click',
+        handler: todoElementReactors.toggleButtonClickHandler
+    },
+    {
+        selector: 'button.delete',
+        action: 'click',
+        handler: todoElementReactors.deleteTodoClickHandler
+    },
+    {
+        selector: 'input.todo',
+        action: 'click',
+        handler: todoElementReactors.editTodoClickHandler
     }
-}
-function addClickEventHandlersToEditButtons () {
-    if (document) {
-        document.querySelectorAll('input.todo')
-            .forEach((element) => {
-                element.addEventListener('click', function handleClickEvent () { todoList.editUITodo(this); });
-            });
-    }
-}
+
+];
 
 function addSaveEditedTodoClickEventHandlerToEditField (el) {
     if (document) {
@@ -182,9 +185,60 @@ function addSaveEditedTodoClickEventHandlerToEditField (el) {
     }
 }
 
-function addClickEventHandlerToAll (elementSelector, fnClickHandler) {
-    addEventHandlerToAll(elementSelector, 'click', fnClickHandler);
+const saveEditedTodo = function (todoElement) {
+    todoList.change(todoElement.getAttribute('item'), todoElement.value);
+};
+
+function exists (obj) {
+    return (typeof obj !== 'undefined');
 }
+
+const topSectionReactors = {
+    addTodoClickHandler () {
+        if (exists(document)) {
+            const inputElement = document.querySelector('#inputTodo');
+            if (exists(inputElement)) {
+                todoList.add(inputElement.value);
+                inputElement.value = '';
+                inputElement.focus();
+            }
+        }
+    },
+    addTodoKeypressHandler (evt) {
+        if (evt.key === 'Enter') {
+            topSectionReactors.addTodoClickHandler();
+        }
+    },
+    toggleAllClickHandler () {
+        todoList.toggleAll();
+    },
+    toggleTodoClickHandler (evt) {
+        toggleUIElement(evt.target, todoList);
+    }
+};
+
+const topSectionActionHandlers = [
+    {
+        selector: 'button#btn-add-todo',
+        action: 'click',
+        handler: topSectionReactors.addTodoClickHandler
+    },
+    {
+        selector: 'input#inputTodo',
+        action: 'keypress',
+        handler: topSectionReactors.addTodoKeypressHandler
+    },
+    {
+        selector: 'button#btn-toggle-all',
+        action: 'click',
+        handler: topSectionReactors.toggleAllClickHandler
+    },
+    {
+        selector: 'button.toggle',
+        action: 'click',
+        handler: topSectionReactors.toggleTodoClickHandler
+    }
+];
 
 function addEventHandlerToAll (elementSelector, action, fnClickHandler) {
     if (document) {
@@ -195,63 +249,14 @@ function addEventHandlerToAll (elementSelector, action, fnClickHandler) {
     }
 }
 
-const saveEditedTodo = function (todoElement) {
-    todoList.change(todoElement.getAttribute('item'), todoElement.value);
-};
-
-function exists (obj) {
-    return (typeof obj !== 'undefined');
+function registerMainClickHandlers () {
+    topSectionActionHandlers.forEach((handler) => {
+        addEventHandlerToAll(handler.selector, handler.action, handler.handler);
+    });
 }
 
-const uiReactors = {
-    addTodoClickHandler: function () {
-        if (exists(document)) {
-            const inputElement = document.querySelector('#inputTodo');
-            if (exists(inputElement)) {
-                todoList.add(inputElement.value);
-                inputElement.value = '';
-                inputElement.focus();
-            }
-        }
-    },
-    addTodoKeypressHandler: function (evt) {
-        if (evt.key === 'Enter') {
-            uiReactors.addTodoClickHandler();
-        }
-    },
-    toggleAllClickHandler: function () {
-        todoList.toggleAll();
-    },
-    toggleTodoClickHandler: function (evt) {
-        toggleUIElement(evt.target, todoList);
-    }
-};
-
-const elementActionHandlers = [
-    {
-        selector: 'button#btn-add-todo',
-        action: 'click',
-        handler: uiReactors.addTodoClickHandler
-    },
-    {
-        selector: 'input#inputTodo',
-        action: 'keypress',
-        handler: uiReactors.addTodoKeypressHandler
-    },
-    {
-        selector: 'button#btn-toggle-all',
-        action: 'click',
-        handler: uiReactors.toggleAllClickHandler
-    },
-    {
-        selector: 'button.toggle',
-        action: 'click',
-        handler: uiReactors.toggleTodoClickHandler
-    }
-];
-
-function registerMainClickHandlers () {
-    elementActionHandlers.forEach((handler) => {
+function registerTodoClickHandlers () {
+    todoElementActionHandlers.forEach((handler) => {
         addEventHandlerToAll(handler.selector, handler.action, handler.handler);
     });
 }
@@ -268,8 +273,8 @@ export {
     checkCompleted,
     toggleUIElement,
     renderTodosWithEventHandling,
-    uiReactors,
-    addClickEventHandlerToAll
+    topSectionReactors as uiReactors,
+    addEventHandlerToAll
 };
 
 export { DONE, NOT_DONE } from '../src/constants.mjs';
