@@ -17,19 +17,33 @@ const todoList = {
             return 'oops should be a string';
         }
         const newTodo = {
+            id: Date.now(),
             text: todo,
             completed: false
         };
 
         this.todos.push(newTodo);
+        localStorage.setItem(newTodo.id, JSON.stringify(newTodo, ['text', 'completed']));
         this.display();
         return newTodo;
     },
+    addFromStorage (storedTodo) {
+        this.todos.push(storedTodo);
+    },
     change (position, newText) {
+        const todo = this.todos[position];
+
+        //REFACTOR:
+        localStorage.removeItem(todo.id);
+        todo.text = newText;
+        localStorage.setItem(todo.id, JSON.stringify(todo, ['text', 'completed']));
+
         this.todos[position].text = newText;
         this.display();
     },
     delete (position) {
+        const todo = this.todos[position];
+        localStorage.removeItem(todo.id);
         this.todos.splice(position, 1);
         this.display();
     },
@@ -260,7 +274,20 @@ function registerTodoClickHandlers () {
 if (document !== undefined) {
     document.addEventListener('DOMContentLoaded', (event) => {
         registerMainClickHandlers();
+        loadTodosFromLocalStorage();
     });
+}
+
+function loadTodosFromLocalStorage () {
+    for (var i = 0; i < localStorage.length; i = i + 1) {
+        const key = localStorage.key(i);
+        let todo = localStorage.getItem(key);
+        todo = JSON.parse(todo);
+        todo.id = key;
+        todoList.addFromStorage(todo);
+        console.log(todo);
+    }
+    todoList.display();
 }
 
 export {

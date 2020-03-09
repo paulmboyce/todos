@@ -11,7 +11,8 @@ test('can add a todo', () => {
     expect(TODO_LIST.todos.length).toBe(numTodos + 1);
 
     // validate new object props
-    expect(result).toEqual({ text: 'Buy Coffee at Starbucks', completed: false });
+    expect(result.text).toEqual('Buy Coffee at Starbucks');
+    expect(result.completed).toEqual(false);
 
     // validate type is a stringContaining
     expect(TODO_LIST.add(99)).toBe('oops should be a string');
