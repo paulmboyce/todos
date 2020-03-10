@@ -32,10 +32,9 @@ const todoList = {
     },
     change (position, newText) {
         const todo = this.todos[position];
-
-        //REFACTOR:
-        localStorage.removeItem(todo.id);
         todo.text = newText;
+        // REFACTOR:
+        localStorage.removeItem(todo.id);
         localStorage.setItem(todo.id, JSON.stringify(todo, ['text', 'completed']));
 
         this.todos[position].text = newText;
@@ -47,15 +46,21 @@ const todoList = {
         this.todos.splice(position, 1);
         this.display();
     },
-    toggleCompleted (position) {
+    toggleCompleted (position, done = undefined) {
         const todo = this.todos[position];
-        todo.completed = !todo.completed;
+        if (typeof done !== 'undefined') {
+            todo.completed = done;
+        } else {
+            todo.completed = !todo.completed;
+        }
+        localStorage.removeItem(todo.id);
+        localStorage.setItem(todo.id, JSON.stringify(todo, ['text', 'completed']));
         this.display();
     },
     toggleAllCompleted (done) {
         const numTodos = this.todos.length;
         for (let i = 0; i < numTodos; i += 1) {
-            this.todos[i].completed = done;
+            this.toggleCompleted(i, done);
         }
     },
     // Set ALL as COMPLETE (true), unless ALL are complete (so set as false)
