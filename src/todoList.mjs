@@ -30,13 +30,14 @@ const todoList = {
     addFromStorage (storedTodo) {
         this.todos.push(storedTodo);
     },
+    editInStorage (todo) {
+        localStorage.removeItem(todo.id);
+        localStorage.setItem(todo.id, JSON.stringify(todo, ['text', 'completed']));
+    },
     change (position, newText) {
         const todo = this.todos[position];
         todo.text = newText;
-        // REFACTOR:
-        localStorage.removeItem(todo.id);
-        localStorage.setItem(todo.id, JSON.stringify(todo, ['text', 'completed']));
-
+        this.editInStorage(todo);
         this.todos[position].text = newText;
         this.display();
     },
@@ -53,8 +54,7 @@ const todoList = {
         } else {
             todo.completed = !todo.completed;
         }
-        localStorage.removeItem(todo.id);
-        localStorage.setItem(todo.id, JSON.stringify(todo, ['text', 'completed']));
+        this.editInStorage(todo);
         this.display();
     },
     toggleAllCompleted (done) {
