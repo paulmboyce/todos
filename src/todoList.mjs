@@ -1,12 +1,15 @@
-import { DONE, NOT_DONE } from '../src/constants.mjs';
 import { addToStorage, editInStorage, loadTodosFromLocalStorage } from '../src/localStorageDAL.mjs';
+import {
+    renderTodosWithEventHandling,
+    initUI,
+    registerMainClickHandlers,
+    checkCompleted
+} from '../src/renderUI.mjs';
 
 const todoList = {
     // format: { id: '<timestamp>', text: 'todo 1', completed: false }, { id: '<timestamp>', text: 'todo 2', completed: false }]
     todos: [],
     display () {
-        const message = buildMessage(this.todos);
-        printTo('output', `My Todos:${message}`);
         // Do on mass because we create the elements on mass.
         // When code changes to append individual elements,
         // we would do this for that element only.
@@ -90,185 +93,6 @@ const todoList = {
     }
 };
 
-function renderTodosWithEventHandling (injectedTodoList) {
-    const elements = buildTodoRows(injectedTodoList.todos);
-    if (document) {
-        const target = document.querySelector('div#id-todos');
-        if (target) {
-            target.innerHTML = elements;
-        }
-    }
-    registerTodoClickHandlers();
-}
-
-function buildMessage (todos) {
-    let message = '';
-    const numTodos = todos.length;
-
-    if (numTodos < 1) {
-        message = 'You have no outstanding Todos!';
-        return message;
-    }
-
-    for (let i = 0; i < numTodos; i += 1) {
-        message = `\n${checkCompleted(todos[i])} ${todos[i].text}${message}`;
-    }
-    return message;
-}
-
-function buildTodoRows (todos) {
-    const numTodos = todos.length;
-    let html = '';
-    for (let i = 0; i < numTodos; i += 1) {
-        let element = `<div><button type="button" item="${i}" class="btn matrix-chalk-purple toggle">${checkCompleted(todos[i])}</button>`;
-        element += `<input type="text" item="${i}" class="todo matrix-chalk-purple ${todos[i].completed ? 'complete' : ''}" size="50" value="${todos[i].text}"></input>`;
-        element += `<button item="${i}" class="delete btn matrix-chalk-purple" >&nbsp;[X]&nbsp;</button>`;
-        element += '</div>';
-        html = element + html; // prepend
-    }
-    return html;
-}
-
-function checkCompleted (todo) {
-    let done = NOT_DONE;
-    if (todo.completed === true) {
-        done = DONE;
-    }
-    return done;
-}
-
-function toggleUIElement (el, injectedTodoList) {
-    const position = el.getAttribute('item');
-    injectedTodoList.toggleCompleted(position);
-    injectedTodoList.display();
-}
-
-function printTo (id, newText) {
-    // Validate web context exists.
-    if (document) {
-        const target = document.querySelector(`#${id}`);
-        if (target) {
-            target.innerHTML = newText;
-        }
-    }
-}
-
-const todoElementReactors = {
-    toggleButtonClickHandler (evt) {
-        toggleUIElement(evt.target, todoList);
-    },
-    deleteTodoClickHandler (evt) {
-        todoList.deleteUITodo(evt.target);
-    },
-    editTodoClickHandler (evt) {
-        todoList.editUITodo(evt.target);
-    },
-    saveTodoClickHandler (evt) {
-        if (evt.key === 'Enter') {
-            saveEditedTodo(evt.target);
-        }
-    }
-};
-
-const todoElementActionHandlers = [
-    {
-        selector: 'button.toggle',
-        action: 'click',
-        handler: todoElementReactors.toggleButtonClickHandler
-    },
-    {
-        selector: 'button.delete',
-        action: 'click',
-        handler: todoElementReactors.deleteTodoClickHandler
-    },
-    {
-        selector: 'input.todo',
-        action: 'click',
-        handler: todoElementReactors.editTodoClickHandler
-    },
-    {
-        selector: 'input.todo[item]',
-        action: 'keypress',
-        handler: todoElementReactors.saveTodoClickHandler
-    }
-];
-
-const saveEditedTodo = function (todoElement) {
-    todoList.change(todoElement.getAttribute('item'), todoElement.value);
-};
-
-function exists (obj) {
-    return (typeof obj !== 'undefined');
-}
-
-const topSectionReactors = {
-    addTodoClickHandler () {
-        if (exists(document)) {
-            const inputElement = document.querySelector('#inputTodo');
-            if (exists(inputElement)) {
-                todoList.add(inputElement.value);
-                inputElement.value = '';
-                inputElement.focus();
-            }
-        }
-    },
-    addTodoKeypressHandler (evt) {
-        if (evt.key === 'Enter') {
-            topSectionReactors.addTodoClickHandler();
-        }
-    },
-    toggleAllClickHandler () {
-        todoList.toggleAll();
-    },
-    toggleTodoClickHandler (evt) {
-        toggleUIElement(evt.target, todoList);
-    }
-};
-
-const topSectionActionHandlers = [
-    {
-        selector: 'button#btn-add-todo',
-        action: 'click',
-        handler: topSectionReactors.addTodoClickHandler
-    },
-    {
-        selector: 'input#inputTodo',
-        action: 'keypress',
-        handler: topSectionReactors.addTodoKeypressHandler
-    },
-    {
-        selector: 'button#btn-toggle-all',
-        action: 'click',
-        handler: topSectionReactors.toggleAllClickHandler
-    },
-    {
-        selector: 'button.toggle',
-        action: 'click',
-        handler: topSectionReactors.toggleTodoClickHandler
-    }
-];
-
-function addEventHandlerToAll (elementSelector, action, fnClickHandler) {
-    if (document) {
-        document.querySelectorAll(elementSelector)
-            .forEach((element) => {
-                element.addEventListener(action, fnClickHandler);
-            });
-    }
-}
-
-function registerMainClickHandlers () {
-    topSectionActionHandlers.forEach((handler) => {
-        addEventHandlerToAll(handler.selector, handler.action, handler.handler);
-    });
-}
-
-function registerTodoClickHandlers () {
-    todoElementActionHandlers.forEach((handler) => {
-        addEventHandlerToAll(handler.selector, handler.action, handler.handler);
-    });
-}
-
 if (document !== undefined) {
     document.addEventListener('DOMContentLoaded', (event) => {
         registerMainClickHandlers();
@@ -278,17 +102,18 @@ if (document !== undefined) {
 
 function initTodoList () {
     todoList.todos = loadTodosFromLocalStorage();
+    initUI(todoList);
     todoList.display();
 }
 
 export {
+    initTodoList,
     todoList,
-    buildMessage,
     checkCompleted,
-    toggleUIElement,
-    renderTodosWithEventHandling,
-    topSectionReactors as uiReactors,
-    addEventHandlerToAll
+    renderTodosWithEventHandling
 };
 
-export { DONE, NOT_DONE } from '../src/constants.mjs';
+export {
+    topSectionReactors as uiReactors,
+    addEventHandlerToAll
+} from '../src/renderUI.mjs';

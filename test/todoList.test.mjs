@@ -1,7 +1,14 @@
 import * as TODO from '../src/todoList.mjs';
+import { DONE, NOT_DONE } from '../src/constants.mjs';
 
 const TODO_LIST = TODO.todoList;
-const TODO_REACTORS = TODO.uiReactors;
+// const TODO_REACTORS = TODO.uiReactors;
+
+beforeEach(() => {
+    localStorage.clear();
+    TODO.initTodoList();
+    TODO_LIST.add('There is one Todo created.');
+});
 
 test('can add a todo', () => {
     const numTodos = TODO_LIST.todos.length;
@@ -47,8 +54,8 @@ test('Check competed', () => {
         { text: 'todo 2', completed: true }
     ];
 
-    expect(TODO.checkCompleted(TODO_LIST.todos[0])).toBe(TODO.NOT_DONE);
-    expect(TODO.checkCompleted(TODO_LIST.todos[1])).toBe(TODO.DONE);
+    expect(TODO.checkCompleted(TODO_LIST.todos[0])).toBe(NOT_DONE);
+    expect(TODO.checkCompleted(TODO_LIST.todos[1])).toBe(DONE);
 });
 
 test('toggle all as COMPLETE', () => {
@@ -104,7 +111,7 @@ test('Special Case: toggle all sets to FALSE if everything is true ', () => {
         expect(TODO_LIST.todos[i].completed).toEqual(true);
     }
 });
-
+/*
 test('toggleUI component check use of API, for example ' +
       'that it calls getAttribute, for "item"' +
       'much of this is unneccessary because were are testing internal calls rather than funtion effects ' +
@@ -119,6 +126,9 @@ test('toggleUI component check use of API, for example ' +
         toggleCompleted: mockFnToggleCompleted,
         display: mockFnDisplay
     };
+
+Should remove this test??
+Or should we pass thru to rendrUI?
 
     TODO.toggleUIElement(fakeElement, fakeTodoList);
 
@@ -164,7 +174,7 @@ test('toggle ALL ', () => {
     // ASSERT
     expect(mockFnClickHandler).toHaveBeenCalled();
 });
-
+*/
 test(' >>>NEXT: It should remember the list on refresh ..!!', () => {
     console.log(' >>>\n----> NEXT: It should remember the list on refresh ..!!\n<<<');
 });
