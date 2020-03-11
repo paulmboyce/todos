@@ -1,0 +1,29 @@
+
+function addToStorage (id, obj, fields) {
+    localStorage.setItem(id, JSON.stringify(obj, fields));
+}
+
+function editInStorage (todo) {
+    localStorage.removeItem(todo.id);
+    localStorage.setItem(todo.id, JSON.stringify(todo, ['text', 'completed']));
+}
+
+function loadTodosFromLocalStorage () {
+    const storedTodos = [];
+
+    for (var i = 0; i < localStorage.length; i = i + 1) {
+        const key = localStorage.key(i);
+        let todo = localStorage.getItem(key);
+        todo = JSON.parse(todo);
+        todo.id = key;
+        storedTodos.push(todo);
+        console.log(todo);
+    }
+    return storedTodos;
+}
+
+export {
+    addToStorage,
+    editInStorage,
+    loadTodosFromLocalStorage
+};

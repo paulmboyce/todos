@@ -1,8 +1,9 @@
 
 import { DONE, NOT_DONE } from '../src/constants.mjs';
+import { addToStorage, editInStorage, loadTodosFromLocalStorage } from '../src/localStorageDAL.mjs';
 
 const todoList = {
-    // format: { text: 'todo 1', completed: false }, { text: 'todo 2', completed: false }]
+    // format: { id: '<timestamp>', text: 'todo 1', completed: false }, { id: '<timestamp>', text: 'todo 2', completed: false }]
     todos: [],
     display () {
         const message = buildMessage(this.todos);
@@ -23,21 +24,14 @@ const todoList = {
         };
 
         this.todos.push(newTodo);
-        localStorage.setItem(newTodo.id, JSON.stringify(newTodo, ['text', 'completed']));
+        addToStorage(newTodo.id, newTodo, ['text', 'completed']);
         this.display();
         return newTodo;
-    },
-    addFromStorage (storedTodo) {
-        this.todos.push(storedTodo);
-    },
-    editInStorage (todo) {
-        localStorage.removeItem(todo.id);
-        localStorage.setItem(todo.id, JSON.stringify(todo, ['text', 'completed']));
     },
     change (position, newText) {
         const todo = this.todos[position];
         todo.text = newText;
-        this.editInStorage(todo);
+        editInStorage(todo);
         this.todos[position].text = newText;
         this.display();
     },
@@ -54,7 +48,7 @@ const todoList = {
         } else {
             todo.completed = !todo.completed;
         }
-        this.editInStorage(todo);
+        editInStorage(todo);
         this.display();
     },
     toggleAllCompleted (done) {
@@ -279,19 +273,12 @@ function registerTodoClickHandlers () {
 if (document !== undefined) {
     document.addEventListener('DOMContentLoaded', (event) => {
         registerMainClickHandlers();
-        loadTodosFromLocalStorage();
+        initTodoList();
     });
 }
 
-function loadTodosFromLocalStorage () {
-    for (var i = 0; i < localStorage.length; i = i + 1) {
-        const key = localStorage.key(i);
-        let todo = localStorage.getItem(key);
-        todo = JSON.parse(todo);
-        todo.id = key;
-        todoList.addFromStorage(todo);
-        console.log(todo);
-    }
+function initTodoList () {
+    todoList.todos = loadTodosFromLocalStorage();
     todoList.display();
 }
 
