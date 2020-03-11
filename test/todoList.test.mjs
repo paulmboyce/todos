@@ -40,53 +40,6 @@ test('can toggle completed', () => {
     expect(TODO_LIST.todos[0].completed).toBe(false);
 });
 
-test('build message works', () => {
-    // Lets test for empty
-    TODO_LIST.todos = [];
-    expect(TODO.buildMessage(TODO_LIST.todos)).toBe('You have no outstanding Todos!');
-
-    TODO_LIST.add('todo 1');
-    expect(TODO_LIST.todos.length).toBe(1);
-
-    expect(TODO.buildMessage(TODO_LIST.todos)).toContain('todo 1');
-    expect(TODO.buildMessage(TODO_LIST.todos)).toEqual(expect.stringContaining(`${TODO.NOT_DONE} todo 1`));
-    expect(TODO.buildMessage(TODO_LIST.todos)).toEqual(`\n${TODO.NOT_DONE} todo 1`);
-
-    TODO_LIST.toggleCompleted(0);
-    expect(TODO.buildMessage(TODO_LIST.todos)).toEqual(`\n${TODO.DONE} todo 1`);
-    TODO_LIST.toggleCompleted(0);
-
-    TODO_LIST.add('todo 2');
-    expect(TODO_LIST.todos.length).toBe(2);
-
-    expect(TODO.buildMessage(TODO_LIST.todos)).toContain(`${TODO.NOT_DONE} todo 2`);
-    expect(TODO.buildMessage(TODO_LIST.todos)).toMatch(`${TODO.NOT_DONE} todo 2`);
-    expect(TODO.buildMessage(TODO_LIST.todos)).toEqual(expect.stringContaining(`${TODO.NOT_DONE} todo 2`));
-
-    TODO_LIST.toggleCompleted(1);
-    expect(TODO.buildMessage(TODO_LIST.todos)).toEqual(expect.stringContaining(`\n${TODO.DONE} todo 2`));
-    expect(TODO.buildMessage(TODO_LIST.todos)).toEqual(expect.stringContaining(`\n${TODO.NOT_DONE} todo 1`));
-
-    // Check that new items are PRE-Pended
-    expect(TODO.buildMessage(TODO_LIST.todos)).toEqual(`\n&#10003; todo 2\n${TODO.NOT_DONE} todo 1`);
-
-    // Toggl both items
-    TODO_LIST.toggleCompleted(0);
-    TODO_LIST.toggleCompleted(1);
-    expect(TODO.buildMessage(TODO_LIST.todos)).toEqual(expect.stringContaining('\n&#10003; todo 1'));
-    expect(TODO.buildMessage(TODO_LIST.todos)).toEqual(expect.stringContaining(`\n${TODO.NOT_DONE} todo 2`));
-
-    // crrect order
-    expect(TODO.buildMessage(TODO_LIST.todos)).toEqual(`\n${TODO.NOT_DONE} todo 2\n&#10003; todo 1`);
-
-    // Ok lets delete 2 items and verfy for empty
-    TODO_LIST.delete(0);
-    expect(TODO_LIST.todos.length).toBe(1);
-    TODO_LIST.delete(0);
-    expect(TODO_LIST.todos.length).toBe(0);
-    expect(TODO.buildMessage(TODO_LIST.todos)).toBe('You have no outstanding Todos!');
-});
-
 test('Check competed', () => {
     // Lets test for empty
     TODO_LIST.todos = [
