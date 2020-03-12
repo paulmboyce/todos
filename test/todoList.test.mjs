@@ -2,12 +2,14 @@ import * as TODO from '../src/todoList.mjs';
 import { DONE, NOT_DONE } from '../src/constants.mjs';
 
 const TODO_LIST = TODO.todoList;
-// const TODO_REACTORS = TODO.uiReactors;
 
 beforeEach(() => {
-    localStorage.clear();
     TODO.initTodoList();
     TODO_LIST.add('There is one Todo created.');
+});
+
+afterEach(() => {
+    localStorage.clear();
 });
 
 test('can add a todo', () => {
@@ -111,70 +113,7 @@ test('Special Case: toggle all sets to FALSE if everything is true ', () => {
         expect(TODO_LIST.todos[i].completed).toEqual(true);
     }
 });
-/*
-test('toggleUI component check use of API, for example ' +
-      'that it calls getAttribute, for "item"' +
-      'much of this is unneccessary because were are testing internal calls rather than funtion effects ' +
-      'but it is an example of using injection of fake (aka MOCK) objects.', () => {
-    const mockFnGetAttribute = jest.fn(() => 0);
 
-    const fakeElement = { getAttribute: mockFnGetAttribute };
-    const mockFnToggleCompleted = jest.fn();
-
-    const mockFnDisplay = jest.fn();
-    const fakeTodoList = {
-        toggleCompleted: mockFnToggleCompleted,
-        display: mockFnDisplay
-    };
-
-Should remove this test??
-Or should we pass thru to rendrUI?
-
-    TODO.toggleUIElement(fakeElement, fakeTodoList);
-
-    expect(mockFnGetAttribute).toBeCalled();
-    expect(mockFnGetAttribute).toHaveBeenCalledWith('item');
-
-    expect(mockFnToggleCompleted).toBeCalled();
-    expect(mockFnToggleCompleted).toHaveBeenCalledWith(0);
-
-    expect(mockFnDisplay).toBeCalled();
-});
-
-test('Check click event for ADD TODO button', () => {
-    // ARRANGE
-    window.document.body.innerHTML = '<button type="button" class="btn btn-warning" id="btn-add-todo">ADD</button>' +
-   '<input type="text" id="inputTodo"/>';
-
-    const mockFnClickHandler = jest.fn(() => {
-        TODO_REACTORS.addTodoClickHandler();
-    });
-    TODO.addEventHandlerToAll('button#btn-add-todo', 'click', mockFnClickHandler);
-
-    // ACT
-    document.getElementById('inputTodo').value = 'XYZ';
-    document.getElementById('btn-add-todo').click();
-
-    // ASSERT
-    expect(mockFnClickHandler).toHaveBeenCalled();
-    expect(TODO_LIST.todos[TODO_LIST.todos.length - 1].text).toBe('XYZ');
-});
-
-test('toggle ALL ', () => {
-    // ARRANGE
-    const mockFnClickHandler = jest.fn(() => {
-        TODO_LIST.toggleAll();
-    });
-    document.body.innerHTML = '<button type="button" id="btn-toggle-all"</button>';
-    TODO.addEventHandlerToAll('button#btn-toggle-all', 'click', mockFnClickHandler);
-
-    // ACT
-    document.getElementById('btn-toggle-all').click();
-
-    // ASSERT
-    expect(mockFnClickHandler).toHaveBeenCalled();
-});
-*/
 test(' >>>NEXT: It should remember the list on refresh ..!!', () => {
     console.log(' >>>\n----> NEXT: It should remember the list on refresh ..!!\n<<<');
 });

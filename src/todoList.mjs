@@ -112,8 +112,3 @@ export {
     checkCompleted,
     renderTodosWithEventHandling
 };
-
-export {
-    topSectionReactors as uiReactors,
-    addEventHandlerToAll
-} from '../src/renderUI.mjs';

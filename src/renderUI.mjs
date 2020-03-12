@@ -166,5 +166,6 @@ export {
     registerMainClickHandlers,
     topSectionReactors,
     checkCompleted,
-    addEventHandlerToAll
+    addEventHandlerToAll,
+    toggleUIElement
 };
