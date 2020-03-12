@@ -109,6 +109,5 @@ function initTodoList () {
 export {
     initTodoList,
     todoList,
-    checkCompleted,
-    renderTodosWithEventHandling
+    checkCompleted
 };

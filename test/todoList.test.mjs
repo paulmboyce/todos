@@ -113,7 +113,3 @@ test('Special Case: toggle all sets to FALSE if everything is true ', () => {
         expect(TODO_LIST.todos[i].completed).toEqual(true);
     }
 });
-
-test(' >>>NEXT: It should remember the list on refresh ..!!', () => {
-    console.log(' >>>\n----> NEXT: It should remember the list on refresh ..!!\n<<<');
-});

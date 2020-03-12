@@ -10,15 +10,16 @@ function editInStorage (todo) {
 
 function loadTodosFromLocalStorage () {
     const storedTodos = [];
-
     for (var i = 0; i < localStorage.length; i = i + 1) {
         const key = localStorage.key(i);
         let todo = localStorage.getItem(key);
         todo = JSON.parse(todo);
         todo.id = key;
         storedTodos.push(todo);
-        console.log(todo);
     }
+    storedTodos.sort(function descendingIDs (a, b) {
+        return Number(a.id) - Number(b.id);
+    });
     return storedTodos;
 }
 
