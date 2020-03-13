@@ -4,6 +4,7 @@ var model = {};
 
 function initUI (dataModel) {
     model = dataModel;
+    registerMainClickHandlers();
 }
 
 const todoElementReactors = {
@@ -71,7 +72,7 @@ function buildTodoRows (todos) {
     const numTodos = todos.length;
     let html = '';
     for (let i = 0; i < numTodos; i += 1) {
-        let element = `<div><button type="button" item="${i}" class="btn matrix-chalk-purple toggle">${checkCompleted(todos[i])}</button>`;
+        let element = `<div><button type="button" item="${i}" class="btn matrix-chalk-purple toggle">${getCompletedStatus(todos[i])}</button>`;
         element += `<input type="text" item="${i}" class="todo matrix-chalk-purple ${todos[i].completed ? 'complete' : ''}" size="50" value="${todos[i].text}"></input>`;
         element += `<button item="${i}" class="delete btn matrix-chalk-purple" >&nbsp;[X]&nbsp;</button>`;
         element += '</div>';
@@ -80,7 +81,7 @@ function buildTodoRows (todos) {
     return html;
 }
 
-function checkCompleted (todo) {
+function getCompletedStatus (todo) {
     let done = NOT_DONE;
     if (todo.completed === true) {
         done = DONE;
@@ -165,7 +166,7 @@ export {
     renderTodosWithEventHandling,
     registerMainClickHandlers,
     topSectionReactors,
-    checkCompleted,
+    getCompletedStatus,
     addEventHandlerToAll,
     toggleUIElement
 };

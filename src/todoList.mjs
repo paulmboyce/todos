@@ -1,9 +1,7 @@
 import { addToStorage, editInStorage, loadTodosFromLocalStorage } from '../src/localStorageDAL.mjs';
 import {
     renderTodosWithEventHandling,
-    initUI,
-    registerMainClickHandlers,
-    checkCompleted
+    initUI
 } from '../src/renderUI.mjs';
 
 const todoList = {
@@ -38,10 +36,14 @@ const todoList = {
         this.display();
     },
     delete (position) {
+        if (typeof this.todos[position] === 'undefined') {
+            return -1;
+        }
         const todo = this.todos[position];
         localStorage.removeItem(todo.id);
         this.todos.splice(position, 1);
         this.display();
+        return 1;
     },
     toggleCompleted (position, done = undefined) {
         const todo = this.todos[position];
@@ -95,7 +97,6 @@ const todoList = {
 
 if (document !== undefined) {
     document.addEventListener('DOMContentLoaded', (event) => {
-        registerMainClickHandlers();
         initTodoList();
     });
 }
@@ -108,6 +109,5 @@ function initTodoList () {
 
 export {
     initTodoList,
-    todoList,
-    checkCompleted
+    todoList
 };

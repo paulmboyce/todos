@@ -2,13 +2,24 @@ import {
     toggleUIElement,
     addEventHandlerToAll,
     topSectionReactors,
-    initUI
+    initUI,
+    getCompletedStatus
 } from '../src/renderUI.mjs';
 
+import { DONE, NOT_DONE } from '../src/constants.mjs';
 import { todoList } from '../src/todoList.mjs';
 
 beforeEach(() => {
+    todoList.todos = [
+        { text: 'todo 1', completed: false },
+        { text: 'todo 2', completed: true }
+    ];
     initUI(todoList);
+});
+
+test('Check if completed', () => {
+    expect(getCompletedStatus(todoList.todos[0])).toBe(NOT_DONE);
+    expect(getCompletedStatus(todoList.todos[1])).toBe(DONE);
 });
 
 test('toggleUI component check use of API, for example ' +
