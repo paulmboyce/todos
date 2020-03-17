@@ -3,7 +3,7 @@ import * as TODO from '../src/todoList.mjs';
 const todoList = TODO.todoList;
 
 beforeEach(() => {
-    TODO.initTodoList();
+    TODO.initApp();
     todoList.add('There is one Todo created.');
 });
 

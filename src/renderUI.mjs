@@ -12,10 +12,10 @@ const todoElementReactors = {
         toggleUIElement(evt.target, model);
     },
     deleteTodoClickHandler (evt) {
-        model.deleteUITodo(evt.target);
+        deleteUITodo(evt.target, model);
     },
     editTodoClickHandler (evt) {
-        model.editUITodo(evt.target);
+        editUITodo(evt.target);
     },
     saveTodoClickHandler (evt) {
         if (evt.key === 'Enter') {
@@ -55,6 +55,17 @@ function toggleUIElement (el, injectedTodoList) {
     const position = el.getAttribute('item');
     injectedTodoList.toggleCompleted(position);
     injectedTodoList.display();
+}
+
+function deleteUITodo (el, model) {
+    const position = el.getAttribute('item');
+    model.delete(position);
+}
+
+function editUITodo (el) {
+    const position = el.getAttribute('item');
+    const inputEdit = document.querySelector(`input.todo[item="${position}"]`);
+    inputEdit.focus();
 }
 
 function renderTodosWithEventHandling (model) {
@@ -168,5 +179,6 @@ export {
     topSectionReactors,
     getCompletedStatus,
     addEventHandlerToAll,
-    toggleUIElement
+    toggleUIElement,
+    deleteUITodo
 };

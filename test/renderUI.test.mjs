@@ -1,5 +1,6 @@
 import {
     toggleUIElement,
+    deleteUITodo,
     addEventHandlerToAll,
     topSectionReactors,
     initUI,
@@ -79,4 +80,25 @@ test('toggle ALL ', () => {
 
     // ASSERT
     expect(mockFnClickHandler).toHaveBeenCalled();
+});
+
+test('Delete a todo from UI, delets from model.', () => {
+    // ARRANGE:
+    document.body.innerHTML =
+    '<div>' +
+        '<button item="0"></button>' +
+    '</div>';
+    const button = document.querySelector('button');
+    const mockFnClickHandler = jest.fn((evt) => {
+        deleteUITodo(evt.target, todoList);
+    });
+    button.addEventListener('click', mockFnClickHandler);
+
+    // ACT:
+    expect(todoList.todos.length).toBe(2);
+    document.querySelector('button').click();
+
+    // ASSERT:
+    expect(mockFnClickHandler).toHaveBeenCalled();
+    expect(todoList.todos.length).toBe(1);
 });

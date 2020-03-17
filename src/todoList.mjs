@@ -1,8 +1,16 @@
-import { addToStorage, editInStorage, loadTodosFromLocalStorage } from '../src/localStorageDAL.mjs';
+import {
+    addToStorage,
+    editInStorage,
+    loadTodosFromLocalStorage
+} from '../src/localStorageDAL.mjs';
+
 import {
     renderTodosWithEventHandling,
     initUI
 } from '../src/renderUI.mjs';
+
+const SUCCESS = 1;
+const FAIL = -1;
 
 const todoList = {
     // format: { id: '<timestamp>', text: 'todo 1', completed: false }, { id: '<timestamp>', text: 'todo 2', completed: false }]
@@ -37,13 +45,13 @@ const todoList = {
     },
     delete (position) {
         if (typeof this.todos[position] === 'undefined') {
-            return -1;
+            return FAIL;
         }
         const todo = this.todos[position];
         localStorage.removeItem(todo.id);
         this.todos.splice(position, 1);
         this.display();
-        return 1;
+        return SUCCESS;
     },
     toggleCompleted (position, done = undefined) {
         const todo = this.todos[position];
@@ -81,33 +89,22 @@ const todoList = {
         }
         // Update UI.
         this.display();
-    },
-    deleteUITodo (el) {
-        const position = el.getAttribute('item');
-        todoList.delete(position);
-    },
-    editUITodo (el) {
-        const position = el.getAttribute('item');
-        console.log(`clicked ${el} ${position}`);
-
-        const inputEdit = document.querySelector(`input.todo[item="${position}"]`);
-        inputEdit.focus();
     }
 };
 
 if (document !== undefined) {
     document.addEventListener('DOMContentLoaded', (event) => {
-        initTodoList();
+        initApp();
     });
 }
 
-function initTodoList () {
+function initApp () {
     todoList.todos = loadTodosFromLocalStorage();
     initUI(todoList);
     todoList.display();
 }
 
 export {
-    initTodoList,
+    initApp,
     todoList
 };
