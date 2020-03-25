@@ -4,7 +4,7 @@ const todoList = TODO.todoList;
 
 beforeEach(() => {
     TODO.initApp();
-    todoList.add('There is one Todo created.');
+    todoList.add('There is one Todo created.', () => {});
 });
 
 afterEach(() => {
@@ -12,8 +12,10 @@ afterEach(() => {
 });
 
 test('can add a todo', () => {
+    // ARRANGE:
+    const mockFnDisplay = jest.fn(() => {});
     const numTodos = todoList.todos.length;
-    const result = todoList.add('Buy Coffee at Starbucks');
+    const result = todoList.add('Buy Coffee at Starbucks', mockFnDisplay);
 
     // validate list has grown by 1
     expect(todoList.todos.length).toBe(numTodos + 1);
@@ -23,29 +25,40 @@ test('can add a todo', () => {
     expect(result.completed).toEqual(false);
 
     // validate type is a stringContaining
-    expect(todoList.add(99)).toBe('oops should be a string');
-    expect(todoList.add({})).toBe('oops should be a string');
-    expect(todoList.add(true)).toBe('oops should be a string');
+    expect(todoList.add(99, null)).toBe('oops should be a string');
+    expect(todoList.add({}, null)).toBe('oops should be a string');
+    expect(todoList.add(true, null)).toBe('oops should be a string');
 });
 
 test('can change a todo', () => {
-    todoList.change(0, 'changed');
+    // ARRANGE:
+    const mockFnDisplay = jest.fn(() => {});
+
+    // ACT:
+    todoList.change(0, 'changed', mockFnDisplay);
+
+    // ASSERT:
     expect(todoList.todos[0].text).toEqual('changed');
+    expect(mockFnDisplay).toHaveBeenCalled();
 });
 
 test('can Delete a todo', () => {
+    // ARRANGE:
+    const mockRefreshDisplay = jest.fn(() => {});
     expect(todoList.todos.length).toEqual(1);
-    todoList.delete(0);
+    todoList.delete(0, mockRefreshDisplay);
     expect(todoList.todos.length).toEqual(0);
 });
 
 test('cannot delete a non existent item', () => {
+    // ARRANGE:
+    const mockRefreshDisplay = jest.fn(() => {});
     expect(todoList.todos.length).toEqual(1);
-    let success = todoList.delete(0);
+    let success = todoList.delete(0, mockRefreshDisplay);
     expect(success).toEqual(1);
     expect(todoList.todos.length).toEqual(0);
 
-    success = todoList.delete(0);
+    success = todoList.delete(0, mockRefreshDisplay);
     expect(success).toEqual(-1);
     expect(todoList.todos.length).toEqual(0);
 });
@@ -58,61 +71,86 @@ test('all todos are not completed', () => {
 });
 
 test('can toggle completed', () => {
+    // ARRANGE:
+    const mockFn = jest.fn(() => {});
     todoList.todos[0].completed = false;
-    todoList.toggleCompleted(0);
+    // ACT:
+    todoList.toggleCompleted(0, true, mockFn);
+    // ASSERT:
     expect(todoList.todos[0].completed).toBe(true);
-    todoList.toggleCompleted(0);
+    // ACT:
+    todoList.toggleCompleted(0, null, mockFn);
+    // ASSERT:
     expect(todoList.todos[0].completed).toBe(false);
 });
 
 test('toggle all as COMPLETE', () => {
-    todoList.toggleAllCompleted(true);
+    // ARRANGE:
+    const mockFnDisplay = jest.fn();
+
+    // ACT:
+    todoList.toggleAllCompleted(true, mockFnDisplay);
+
+    // ASSERT;
     for (let i = 0; i < todoList.todos.length; i += 1) {
         expect(todoList.todos[i].completed).toBe(true);
     }
+    expect(mockFnDisplay).toHaveBeenCalled();
 });
 
 test('toggle all as NOT COMPLETE', () => {
-    todoList.toggleAllCompleted(false);
+    // ARRANGE:
+    const mockFnDisplay = jest.fn(() => {});
+    todoList.toggleAllCompleted(false, mockFnDisplay);
     for (let i = 0; i < todoList.todos.length; i += 1) {
         expect(todoList.todos[i].completed).toBe(false);
     }
+    expect(mockFnDisplay).toHaveBeenCalled();
 });
 
+
 test('toggle if ALL are complete toggleAll sets ALL to INCOMPLETE', () => {
-    todoList.toggleAllCompleted(true);
-    // Expect ALL to be true
+    // ARRANGE:
+    const mockFnDisplay = jest.fn(() => {});
+
+    // ACT:
+    todoList.toggleAllCompleted(true, mockFnDisplay);
+    // ASSERT:
     for (let i = 0; i < todoList.todos.length; i += 1) {
         expect(todoList.todos[i].completed).toEqual(true);
     }
-
-    todoList.toggleAll();
-
-    // Expect ALL to be false
+    expect(mockFnDisplay).toHaveBeenCalledTimes(1);
+    // ACT:
+    todoList.toggleAll(mockFnDisplay);
+    // ASSERT:Expect ALL to be false
     for (let i = 0; i < todoList.todos.length; i += 1) {
         expect(todoList.todos[i].completed).toEqual(false);
     }
+    expect(mockFnDisplay).toHaveBeenCalledTimes(2);
 });
 
 test('Special Case: toggle all sets to FALSE if everything is true ', () => {
-    todoList.toggleAllCompleted(true); // Sets all true
+    // ARRANGE:
+    const mockFnDisplay = jest.fn(() => {});
+    todoList.toggleAllCompleted(true, mockFnDisplay); // Sets all true
 
-    // Toggle all shsoul go true.
-    todoList.toggleAll();
+    // ACT:
+    todoList.toggleAll(mockFnDisplay);
 
-    // Expect ALL to be true
+    // ASSERT: Expect ALL to be true
     for (let i = 0; i < todoList.todos.length; i += 1) {
         expect(todoList.todos[i].completed).toEqual(false);
     }
-
+    expect(mockFnDisplay).toHaveBeenCalledTimes(2);
     // if even one os false, all beecome true
-
-    todoList.toggleAllCompleted(true); // Sets all true again
+    todoList.toggleAllCompleted(true, mockFnDisplay); // Sets all true again
+    expect(mockFnDisplay).toHaveBeenCalledTimes(3);
     // Mark one as incmplete:
     todoList.todos[0].completed = false;
 
     // Toggle all shsoul go true.
-    todoList.toggleAll();
+    todoList.toggleAll(mockFnDisplay);
+    expect(mockFnDisplay).toHaveBeenCalledTimes(4);
     // Expect ALL to be true
     for (let i = 0; i < todoList.todos.length; i += 1) {
         expect(todoList.todos[i].completed).toEqual(true);

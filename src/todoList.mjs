@@ -5,7 +5,6 @@ import {
 } from '../src/localStorageDAL.mjs';
 
 import {
-    renderTodosWithEventHandling,
     initUI
 } from '../src/renderUI.mjs';
 
@@ -15,13 +14,7 @@ const FAIL = -1;
 const todoList = {
     // format: { id: '<timestamp>', text: 'todo 1', completed: false }, { id: '<timestamp>', text: 'todo 2', completed: false }]
     todos: [],
-    display () {
-        // Do on mass because we create the elements on mass.
-        // When code changes to append individual elements,
-        // we would do this for that element only.
-        renderTodosWithEventHandling(this);
-    },
-    add (todo) {
+    add (todo, callback) {
         if (typeof todo !== 'string') {
             return 'oops should be a string';
         }
@@ -33,44 +26,45 @@ const todoList = {
 
         this.todos.push(newTodo);
         addToStorage(newTodo.id, newTodo, ['text', 'completed']);
-        this.display();
+        callback();
         return newTodo;
     },
-    change (position, newText) {
+    change (position, newText, callback) {
         const todo = this.todos[position];
         todo.text = newText;
         editInStorage(todo);
         this.todos[position].text = newText;
-        this.display();
+        callback();
     },
-    delete (position) {
+    delete (position, callback) {
         if (typeof this.todos[position] === 'undefined') {
             return FAIL;
         }
         const todo = this.todos[position];
         localStorage.removeItem(todo.id);
         this.todos.splice(position, 1);
-        this.display();
+        callback();
         return SUCCESS;
     },
-    toggleCompleted (position, done = undefined) {
+    toggleCompleted (position, done = undefined, callback = () => {}) {
         const todo = this.todos[position];
-        if (typeof done !== 'undefined') {
-            todo.completed = done;
+        if (done != null) {
+            todo.completed = !!done; // force to boolean, in case a number s passed
         } else {
             todo.completed = !todo.completed;
         }
         editInStorage(todo);
-        this.display();
+        callback();
     },
-    toggleAllCompleted (done) {
+    toggleAllCompleted (done, callback = () => {}) {
         const numTodos = this.todos.length;
         for (let i = 0; i < numTodos; i += 1) {
             this.toggleCompleted(i, done);
         }
+        callback();
     },
     // Set ALL as COMPLETE (true), unless ALL are complete (so set as false)
-    toggleAll () {
+    toggleAll (callback) {
         let hasAnyIncomplete = false;
         const numTodos = this.todos.length;
 
@@ -88,7 +82,7 @@ const todoList = {
             this.toggleAllCompleted(false);
         }
         // Update UI.
-        this.display();
+        callback();
     }
 };
 
@@ -101,7 +95,6 @@ if (document !== undefined) {
 function initApp () {
     todoList.todos = loadTodosFromLocalStorage();
     initUI(todoList);
-    todoList.display();
 }
 
 export {

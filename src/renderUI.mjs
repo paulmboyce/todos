@@ -5,6 +5,14 @@ var model = {};
 function initUI (dataModel) {
     model = dataModel;
     registerMainClickHandlers();
+    redrawTodosUI();
+}
+
+function redrawTodosUI () {
+    // Do on mass because we create the elements on mass.
+    // When code changes to append individual elements,
+    // we would do this for that element only.
+    renderTodosWithEventHandling(model);
 }
 
 const todoElementReactors = {
@@ -15,7 +23,7 @@ const todoElementReactors = {
         deleteUITodo(evt.target, model);
     },
     editTodoClickHandler (evt) {
-        editUITodo(evt.target);
+        makeUITodoEditable(evt.target);
     },
     saveTodoClickHandler (evt) {
         if (evt.key === 'Enter') {
@@ -48,21 +56,20 @@ const todoElementActionHandlers = [
 ];
 
 const saveEditedTodo = function (todoElement) {
-    model.change(todoElement.getAttribute('item'), todoElement.value);
+    model.change(todoElement.getAttribute('item'), todoElement.value, redrawTodosUI);
 };
 
-function toggleUIElement (el, injectedTodoList) {
+function toggleUIElement (el, model) {
     const position = el.getAttribute('item');
-    injectedTodoList.toggleCompleted(position);
-    injectedTodoList.display();
+    model.toggleCompleted(position, null, redrawTodosUI);
 }
 
 function deleteUITodo (el, model) {
     const position = el.getAttribute('item');
-    model.delete(position);
+    model.delete(position, redrawTodosUI);
 }
 
-function editUITodo (el) {
+function makeUITodoEditable (el) {
     const position = el.getAttribute('item');
     const inputEdit = document.querySelector(`input.todo[item="${position}"]`);
     inputEdit.focus();
@@ -120,7 +127,7 @@ const topSectionReactors = {
         if (exists(document)) {
             const inputElement = document.querySelector('#inputTodo');
             if (exists(inputElement)) {
-                model.add(inputElement.value);
+                model.add(inputElement.value, redrawTodosUI);
                 inputElement.value = '';
                 inputElement.focus();
             }
@@ -132,10 +139,7 @@ const topSectionReactors = {
         }
     },
     toggleAllClickHandler () {
-        model.toggleAll();
-    },
-    toggleTodoClickHandler (evt) {
-        toggleUIElement(evt.target, model);
+        model.toggleAll(redrawTodosUI);
     }
 };
 
@@ -154,11 +158,6 @@ const topSectionActionHandlers = [
         selector: 'button#btn-toggle-all',
         action: 'click',
         handler: topSectionReactors.toggleAllClickHandler
-    },
-    {
-        selector: 'button.toggle',
-        action: 'click',
-        handler: topSectionReactors.toggleTodoClickHandler
     }
 ];
 

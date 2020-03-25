@@ -32,10 +32,8 @@ test('toggleUI component check use of API, for example ' +
     const fakeElement = { getAttribute: mockFnGetAttribute };
     const mockFnToggleCompleted = jest.fn();
 
-    const mockFnDisplay = jest.fn();
     const fakeTodoList = {
-        toggleCompleted: mockFnToggleCompleted,
-        display: mockFnDisplay
+        toggleCompleted: mockFnToggleCompleted
     };
 
     toggleUIElement(fakeElement, fakeTodoList);
@@ -44,9 +42,6 @@ test('toggleUI component check use of API, for example ' +
     expect(mockFnGetAttribute).toHaveBeenCalledWith('item');
 
     expect(mockFnToggleCompleted).toBeCalled();
-    expect(mockFnToggleCompleted).toHaveBeenCalledWith(0);
-
-    expect(mockFnDisplay).toBeCalled();
 });
 
 test('Check click event for ADD TODO button', () => {
