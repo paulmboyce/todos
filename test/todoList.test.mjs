@@ -108,7 +108,6 @@ test('toggle all as NOT COMPLETE', () => {
     expect(mockFnDisplay).toHaveBeenCalled();
 });
 
-
 test('toggle if ALL are complete toggleAll sets ALL to INCOMPLETE', () => {
     // ARRANGE:
     const mockFnDisplay = jest.fn(() => {});
