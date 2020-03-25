@@ -68,8 +68,18 @@ const todoList = {
     deleteUITodo (el) {
         const position = el.getAttribute('item');
         todoList.delete(position);
-    }
+    },
+    editUITodo (el) {
+        const position = el.getAttribute('item');
+        console.log(`clicked ${el} ${position}`);
 
+        const inputEdit = document.querySelector(`input.todo[item="${position}"]`);
+        inputEdit.removeAttribute('disabled');
+        inputEdit.focus();
+
+        // TODO 
+        alert('TODO: MAke the text area be save on click return');
+    }
 };
 
 function renderTodosWithEventHandling (injectedTodoList) {
@@ -82,6 +92,7 @@ function renderTodosWithEventHandling (injectedTodoList) {
     }
     addClickEventHandlersToToggleButtons(injectedTodoList);
     addClickEventHandlersToDeleteButtons(injectedTodoList);
+    addClickEventHandlersToEditButtons(injectedTodoList);
 }
 
 function buildMessage (todos) {
@@ -104,8 +115,9 @@ function buildTodoRows (todos) {
     let html = '';
     for (let i = 0; i < numTodos; i += 1) {
         let element = `<div><button type="button" item="${i}" class="btn matrix-chalk-purple toggle">${checkCompleted(todos[i])}</button>`;
-        element += `<span class="todo matrix-chalk-purple" rows='1' cols='50' disabled readonly>${todos[i].text}</span>`;
+        element += `<input disabled item="${i}" class="todo matrix-chalk-purple" cols="20" value="${todos[i].text}"></input>`;
         element += `<button item="${i}" class="delete btn matrix-chalk-purple" > Delete [X]</button>`;
+        element += `<button item="${i}" class="edit btn btn-success" > EDIT</button>`;
         element += '</div>';
         html = element + html; // prepend
     }
@@ -153,6 +165,14 @@ function addClickEventHandlersToDeleteButtons () {
             });
     }
 }
+function addClickEventHandlersToEditButtons () {
+    if (document) {
+        document.querySelectorAll('button.edit')
+            .forEach((element) => {
+                element.addEventListener('click', function handleClickEvent () { todoList.editUITodo(this); });
+            });
+    }
+}
 
 function addClickEventHandlerToAll (elementSelector, fnClickHandler) {
     if (document) {
@@ -164,15 +184,19 @@ function addClickEventHandlerToAll (elementSelector, fnClickHandler) {
 }
 
 const addTodoClickHandler = function () {
-    if (document) {
+    if (exists(document)) {
         const inputElement = document.querySelector('#inputTodo');
-        if (inputElement) {
+        if (exists(inputElement)) {
             todoList.add(inputElement.value);
             inputElement.value = '';
             inputElement.focus();
         }
     }
 };
+
+function exists (obj) {
+    return (typeof obj !== 'undefined');
+}
 
 var clickHandlers = [
     {
@@ -189,7 +213,7 @@ var clickHandlers = [
     }
 ];
 
-function registerClickHandlers () {
+function registerMainClickHandlers () {
     clickHandlers.forEach((handler) => {
         addClickEventHandlerToAll(handler.selector, handler.handler);
     });
@@ -197,7 +221,7 @@ function registerClickHandlers () {
 
 if (document !== undefined) {
     document.addEventListener('DOMContentLoaded', (event) => {
-        registerClickHandlers();
+        registerMainClickHandlers();
     });
 }
 
