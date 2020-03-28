@@ -80,7 +80,10 @@ function renderTodosWithEventHandling (model) {
     if (document) {
         const target = document.querySelector('div#id-todos');
         if (target) {
-            target.innerHTML = elements;
+            target.innerHTML = ''; // clear before redraw
+            for (const element of elements) {
+                target.appendChild(element);
+            }
         }
     }
     registerTodoClickHandlers();
@@ -88,15 +91,44 @@ function renderTodosWithEventHandling (model) {
 
 function buildTodoRows (todos) {
     const numTodos = todos.length;
-    let html = '';
+
+    const todoRows = [];
     for (let i = 0; i < numTodos; i += 1) {
-        let element = `<div><button type="button" item="${i}" class="btn matrix-chalk-purple toggle">${getCompletedStatus(todos[i])}</button>`;
-        element += `<input type="text" item="${i}" class="todo matrix-chalk-purple ${todos[i].completed ? 'complete' : ''}" size="50" value="${todos[i].text}"></input>`;
-        element += `<button item="${i}" class="delete btn matrix-chalk-purple" >&nbsp;[X]&nbsp;</button>`;
-        element += '</div>';
-        html = element + html; // prepend
+        let div;
+        if (document) {
+            div = document.createElement('div');
+            div.setAttribute('id', todos[i].id);
+            // Create Status Button:
+            const btn = document.createElement('button');
+            btn.setAttribute('type', 'button');
+            btn.setAttribute('item', '' + i);
+            btn.setAttribute('class', 'btn matrix-chalk-purple toggle');
+            btn.innerHTML = '' + getCompletedStatus(todos[i]);
+            div.appendChild(btn);
+            // Create input text/display field:
+            const input = document.createElement('input');
+            input.setAttribute('value', todos[i].text);
+            input.setAttribute('size', '50');
+            input.setAttribute('type', 'text');
+            input.setAttribute('class', 'todo matrix-chalk-purple' + (todos[i].completed ? ' complete' : ''));
+            div.appendChild(input);
+            // Create toggle button:
+            const toggle = document.createElement('button');
+            toggle.setAttribute('item', '' + i);
+            toggle.setAttribute('class', 'delete btn matrix-chalk-purple');
+            toggle.innerHTML = '&nbsp;[X]&nbsp;';
+            div.append(toggle);
+        }
+        todoRows[i] = div;
     }
-    return html;
+    sortByIdDescending(todoRows);
+    return todoRows;
+}
+
+function sortByIdDescending (array) {
+    array.sort(function (a, b) {
+        return b.id - a.id;
+    });
 }
 
 function getCompletedStatus (todo) {
@@ -179,5 +211,6 @@ export {
     getCompletedStatus,
     addEventHandlerToAll,
     toggleUIElement,
-    deleteUITodo
+    deleteUITodo,
+    sortByIdDescending
 };
