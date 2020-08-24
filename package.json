@@ -9,7 +9,7 @@
     "testMatch": [
       "**/__tests__/**/*.?(m)js?(x)",
       "**/?(*.)(spec|test).?(m)js?(x)"
-      ],
+    ],
     "collectCoverageFrom": [
       "**/*.{js,jsx,mjs}",
       "!**/node_modules/**",
@@ -20,15 +20,16 @@
       "js",
       "jsx",
       "mjs"
-      ],
+    ],
     "transform": {
       "^.+\\.mjs$": "babel-jest"
     }
   },
-  "babel" : {
-    "presets": ["@babel/preset-env"]
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   },
-
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint && npm run coverage",
@@ -40,7 +41,7 @@
     "url": "https://github.com/paulmboyce/todos.git"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.8.6",
+    "@babel/preset-env": "^7.11.0",
     "babel-jest": "^25.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
