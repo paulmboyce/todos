@@ -10,7 +10,7 @@ on:
     - '**.mjs'
     - '**.json'
     # Changes to GitHub CI Pipeline Actions (e.g. this Action!)
-    - '**/.github/**/*.js'
+    - '**/.github/**/*.yml'
 jobs:
   run-test-on-push:
     runs-on: ubuntu-latest
