@@ -7,6 +7,7 @@ on:
     paths:
     # Changes to .JS or .JSON files (ie code or config changes)
     - '**.js'
+    - '**.mjs'
     - '**.json'
     # Changes to GitHub CI Pipepline Actions
     - './github/workflows/**.yml'
