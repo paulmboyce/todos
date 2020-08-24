@@ -1,9 +1,10 @@
 name: CI Pipeline Run Tests on Push Code Changes
 
-on: push
-paths:
-- '**.js'
-- '**.json'
+on:
+  push:
+    paths:
+    - '**.js'
+    - '**.json'
 jobs:
   run-test-on-push:
     runs-on: ubuntu-latest
