@@ -9,7 +9,7 @@ on:
     - '**.js'
     - '**.mjs'
     - '**.json'
-    # Changes to GitHub CI Pipepline Actions
+    # Changes to GitHub CI Pipeline Actions (e.g. this Action!)
     - './github/workflows/**.yml'
 jobs:
   run-test-on-push:
