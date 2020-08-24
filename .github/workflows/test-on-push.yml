@@ -1,3 +1,6 @@
+# Check valid YAML here: https://onlineyamltools.com/validate-yaml
+# Check valid globstars**, paths here: https://globster.xyz/
+
 name: CI Pipeline Run Tests on Push Code Changes
 on:
   push:
