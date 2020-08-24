@@ -1,6 +1,6 @@
 {
   "name": "todo-list",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Following https://watchandcode.com/ practical-javascript",
   "main": "todoList.js",
   "dependencies": {},
